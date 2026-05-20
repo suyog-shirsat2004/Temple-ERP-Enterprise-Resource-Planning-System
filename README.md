@@ -11,10 +11,30 @@
 
 ---
 
+## 📸 Screenshots
+
+<div align="center">
+
+| | |
+|:---:|:---:|
+| **🏠 Home Page** | **👤 Devotee Dashboard** |
+| ![Home](Screenshots/Home.png) | ![Dashboard](Screenshots/Devotee%20dashboard.png) |
+| **🎫 Pass Booking Form** | **📊 Admin Analytics** |
+| ![Pass Booking](Screenshots/Pass%20booking%20form.png) | ![Admin](Screenshots/Admin%20analytics.png) |
+| **🏨 Room Booking** | **🍽️ Restaurant Ordering** |
+| ![Room Booking](Screenshots/Room%20booking.png) | ![Restaurant](Screenshots/Restaurant%20ordering.png) |
+| **🧾 Donation Receipt** | |
+| ![Donation](Screenshots/Donation%20receipt.png) | |
+
+</div>
+
+---
+
 ## 📋 Table of Contents
 
 1. [Screenshots](#screenshots)
 2. [Overview](#overview)
+3. [System Architecture](#system-architecture)
 3. [System Architecture](#system-architecture)
 4. [How It Works](#how-it-works)
 5. [Features](#features)
@@ -977,27 +997,6 @@ vercel
 2. Create database user
 3. Whitelist IP (0.0.0.0/0 for all)
 4. Get connection string: `mongodb+srv://user:pass@cluster.mongodb.net/temple_erp`
-
----
-
-## 📸 Screenshots
-
-<div align="center">
-
-| | |
-|:---:|:---:|
-| **🏠 Home Page** | **👤 Devotee Dashboard** |
-| ![Home](Screenshots/Home.png) | ![Dashboard](Screenshots/Devotee%20dashboard.png) |
-| **🎫 Pass Booking Form** | **📊 Admin Analytics** |
-| ![Pass Booking](Screenshots/Pass%20booking%20form.png) | ![Admin](Screenshots/Admin%20analytics.png) |
-| **🏨 Room Booking** | **🍽️ Restaurant Ordering** |
-| ![Room Booking](Screenshots/Room%20booking.png) | ![Restaurant](Screenshots/Restaurant%20ordering.png) |
-| **🧾 Donation Receipt** | |
-| ![Donation](Screenshots/Donation%20receipt.png) | |
-
-</div>
-
----
 
 ## 🤝 Contributing
 
