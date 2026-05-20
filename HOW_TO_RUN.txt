@@ -1,0 +1,25 @@
+================================================================================
+                    TEMPLE ERP SYSTEM - HOW TO RUN
+================================================================================
+
+OPEN TWO TERMINAL WINDOWS:
+
+TERMINAL 1 (Backend):
+    cd "D:\Project re\backend"
+    npm run dev
+
+TERMINAL 2 (Frontend):
+    cd "D:\Project re\frontend"
+    npm run dev
+
+================================================================================
+OPEN BROWSER:
+    http://localhost:5173
+
+ADMIN LOGIN:
+    Email: suyogshirsat2004@gmail.com
+    Password: suyog2004
+
+STOP:
+    Press Ctrl+C in both terminals
+================================================================================
