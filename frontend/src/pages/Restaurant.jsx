@@ -58,10 +58,10 @@ const Restaurant = () => {
     setShowProcessing(true);
     try {
       const payload = {
-        items: JSON.stringify(cart),
+        items: cart.map(item => ({ name: item.item_name, price: item.price, qty: item.qty })),
         payment_method: paymentMethod
       };
-      const res = await api.post('/restaurant/place_order', payload);
+      const res = await api.post('/restaurant', payload);
       setMessage({ type: 'success', text: res.data.message || 'Order placed successfully!' });
       setCart([]);
       setShowCart(false);
@@ -117,7 +117,7 @@ const Restaurant = () => {
       }}>
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'url(/images/temple/icon-symbol.webp) no-repeat center center',
+          background: 'url(/images/temple/icon symbol.webp) no-repeat center center',
           backgroundSize: 250, opacity: 0.1, animation: 'float 6s ease-in-out infinite'
         }}></div>
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -188,44 +188,45 @@ const Restaurant = () => {
         </div>
 
         {/* Menu Grid */}
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 30
-        }}>
-          {filteredItems.map((item, index) => {
-            const img = menuImages[index % menuImages.length];
-            const isVeg = item.is_veg !== false;
-            return (
-              <div key={item.id} style={{
-                background: 'white', borderRadius: 20, overflow: 'hidden',
-                boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
-                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-10px) scale(1.02)';
-                e.currentTarget.style.boxShadow = '0 25px 60px rgba(236, 72, 153, 0.25)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.1)';
-              }}
-              >
-                <div style={{ height: 200, position: 'relative', overflow: 'hidden' }}>
-                  <img src={`/images/restro/${img}`} alt={item.item_name} style={{
-                    width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease'
-                  }}
-                  onMouseEnter={(e) => e.target.style.transform = 'scale(1.15)'}
-                  onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                  />
-                  <div style={{
-                    width: '100%', height: '100%', display: 'none', alignItems: 'center',
-                    justifyContent: 'center', background: 'linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%)'
-                  }}>
-                    <i className="fas fa-utensils" style={{ fontSize: '4rem', color: 'rgba(236, 72, 153, 0.3)' }}></i>
-                  </div>
+        {filteredItems.length > 0 ? (
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 30
+          }}>
+            {filteredItems.map((item, index) => {
+              const img = menuImages[index % menuImages.length];
+              const isVeg = item.is_veg !== false;
+              return (
+                <div key={item.id} style={{
+                  background: 'white', borderRadius: 20, overflow: 'hidden',
+                  boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-10px) scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 25px 60px rgba(236, 72, 153, 0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                  e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,0,0,0.1)';
+                }}
+                >
+                  <div style={{ height: 200, position: 'relative', overflow: 'hidden' }}>
+                    <img src={`/images/restro/${img}`} alt={item.item_name} style={{
+                      width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease'
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                    onMouseEnter={(e) => e.target.style.transform = 'scale(1.15)'}
+                    onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                    />
+                    <div style={{
+                      width: '100%', height: '100%', display: 'none', alignItems: 'center',
+                      justifyContent: 'center', background: 'linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%)'
+                    }}>
+                      <i className="fas fa-utensils" style={{ fontSize: '4rem', color: 'rgba(236, 72, 153, 0.3)' }}></i>
+                    </div>
                   <div style={{
                     position: 'absolute', top: 15, left: 15, width: 28, height: 28,
                     borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -278,7 +279,22 @@ const Restaurant = () => {
               </div>
             );
           })}
-        </div>
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+            <div style={{
+              width: 120, height: 120, margin: '0 auto 30px',
+              background: 'linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%)',
+              borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              <i className="fas fa-utensils" style={{ fontSize: '3rem', color: '#ec4899' }}></i>
+            </div>
+            <h3 style={{ color: '#1e3c72', fontSize: '1.8rem', marginBottom: 15 }}>Menu Coming Soon</h3>
+            <p style={{ color: '#666', fontSize: '1.1rem', maxWidth: 500, margin: '0 auto' }}>
+              We're preparing our menu with delicious vegetarian meals and prasad. Please check back later!
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Floating Cart Button */}
@@ -420,7 +436,11 @@ const Restaurant = () => {
                       <div style={{ textAlign: 'center', marginTop: 20, padding: 20, background: 'white', borderRadius: 15, border: '2px dashed #22c55e', animation: 'fadeInUp 0.5s ease' }}>
                         <div className="scan-animation" style={{ position: 'relative' }}>
                           <div style={{ width: 180, height: 180, margin: '0 auto 15px', borderRadius: 10, overflow: 'hidden', boxShadow: '0 5px 20px rgba(0,0,0,0.1)' }}>
-                            <img src="/images/pay/QR.jpeg" alt="Payment QR" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src="/images/pay/qr.png" alt="Payment QR" style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            onError={(e) => {
+                              e.target.src = '/images/pay/QR.jpeg';
+                              e.target.onerror = () => { e.target.style.display = 'none'; };
+                            }} />
                           </div>
                         </div>
                         <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#22c55e', marginBottom: 10 }}>Amount: ₹{totalPrice.toLocaleString()}</div>

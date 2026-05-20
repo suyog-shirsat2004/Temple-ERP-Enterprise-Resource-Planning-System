@@ -36,7 +36,7 @@ const RoomBooking = () => {
   };
 
   useEffect(() => {
-    api.get('/rooms').then(res => {
+    api.get('/bookings/rooms').then(res => {
       setRooms(res.data.rooms || []);
     }).catch(() => {
       setRooms([]);
@@ -53,7 +53,7 @@ const RoomBooking = () => {
 
   const selectRoom = (room, index) => {
     setSelectedRoom({ ...room, index });
-    setFormData({ ...formData, room_id: room.id });
+    setFormData({ ...formData, room_id: room._id });
     calculateTotal(formData.check_in, formData.check_out, room.price_per_day);
   };
 
@@ -111,8 +111,8 @@ const RoomBooking = () => {
     setLoading(true);
     setMessage({ type: '', text: '' });
     try {
-      const payload = { ...formData, room_id: selectedRoom.id };
-      const res = await api.post('/room_booking/book', payload);
+      const payload = { ...formData, room_id: selectedRoom._id };
+      const res = await api.post('/bookings', payload);
       setMessage({ type: 'success', text: res.data.message || 'Booking successful!' });
       setFormData({ guest_name: '', phone: '', email: '', check_in: '', check_out: '', no_of_guests: 1 });
       setTotalAmount(0);
@@ -129,8 +129,8 @@ const RoomBooking = () => {
     if (!modalRoom) return;
     setLoading(true);
     try {
-      const payload = { ...modalForm, room_id: modalRoom.id };
-      const res = await api.post('/room_booking/book', payload);
+      const payload = { ...modalForm, room_id: modalRoom._id };
+      const res = await api.post('/bookings', payload);
       setMessage({ type: 'success', text: res.data.message || 'Booking successful!' });
       closeModal();
     } catch (err) {
@@ -230,45 +230,43 @@ const RoomBooking = () => {
                 const roomType = room.room_type ? (room.room_type.charAt(0).toUpperCase() + room.room_type.slice(1)) : 'Standard';
                 const isSelected = selectedRoom && selectedRoom.id === room.id;
 
-                return (
-                  <div key={room.id} onClick={() => selectRoom(room, i)}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.95)', borderRadius: 25, overflow: 'hidden',
-                      boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
-                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)', cursor: 'pointer',
-                      border: isSelected ? '4px solid #f59e0b' : '4px solid transparent',
-                      transform: isSelected ? 'translateY(-10px) scale(1.02)' : 'translateY(0)',
-                      position: 'relative'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isSelected) {
+                  return (
+                    <div key={room._id} onClick={() => openModal(room, i)}
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.95)', borderRadius: 25, overflow: 'hidden',
+                        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)', cursor: 'pointer',
+                        border: '4px solid transparent',
+                        transform: 'translateY(0)',
+                        position: 'relative'
+                      }}
+                      onMouseEnter={(e) => {
                         e.currentTarget.style.transform = 'translateY(-15px) scale(1.02)';
                         e.currentTarget.style.boxShadow = '0 30px 60px rgba(0,0,0,0.3)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isSelected) {
+                      }}
+                      onMouseLeave={(e) => {
                         e.currentTarget.style.transform = 'translateY(0)';
                         e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0,0,0,0.25)';
-                      }
-                    }}
-                  >
-                    {isSelected && (
-                      <div style={{
-                        position: 'absolute', top: 15, right: 15,
-                        background: '#f59e0b', color: '#fff', padding: '8px 16px',
-                        borderRadius: 20, fontWeight: 600, fontSize: '0.85rem', zIndex: 10,
-                        animation: 'pulse 1s ease-in-out infinite'
-                      }}>✓ Selected</div>
-                    )}
+                      }}
+                    >
                     <div style={{ position: 'relative', height: 220, overflow: 'hidden' }}>
                       <img src={`/images/rooms/${img}`} alt={name} style={{
                         width: '100%', height: '100%', objectFit: 'cover',
                         transition: 'transform 0.5s ease'
                       }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
                       onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'}
                       onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
                       />
+                      <div style={{
+                        width: '100%', height: '100%', display: 'none', alignItems: 'center',
+                        justifyContent: 'center', background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)'
+                      }}>
+                        <i className="fas fa-bed" style={{ fontSize: '4rem', color: 'rgba(245, 158, 11, 0.3)' }}></i>
+                      </div>
                       <div style={{
                         position: 'absolute', top: 15, left: 15,
                         background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%)',
@@ -310,19 +308,34 @@ const RoomBooking = () => {
           )}
         </div>
 
-        {/* Booking Form */}
-        {selectedRoom && (
+        {/* Booking Modal */}
+        {showModal && modalRoom && (
           <div style={{
-            background: 'rgba(255, 255, 255, 0.95)', borderRadius: 25, padding: 40,
-            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
-            animation: 'fadeInUp 0.8s ease-out'
-          }}>
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(0,0,0,0.7)', zIndex: 9999,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20
+          }} onClick={closeModal}>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.98)', borderRadius: 25, padding: 40,
+              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+              animation: 'fadeInUp 0.8s ease-out', maxWidth: 600, width: '100%',
+              maxHeight: '90vh', overflow: 'auto', position: 'relative'
+            }} onClick={(e) => e.stopPropagation()}>
+              <button onClick={closeModal} style={{
+                position: 'absolute', top: 20, right: 20, background: '#f1f5f9',
+                border: 'none', width: 40, height: 40, borderRadius: '50%',
+                cursor: 'pointer', fontSize: '1.2rem', display: 'flex',
+                alignItems: 'center', justifyContent: 'center', color: '#64748b'
+              }}>✕</button>
             <div style={{ textAlign: 'center', marginBottom: 35 }}>
+              <img src={`/images/rooms/${roomImages[modalRoom.index % roomImages.length]}`} alt={modalRoom.room_name}
+                style={{ width: '100%', height: 200, objectFit: 'cover', borderRadius: 15, marginBottom: 20 }}
+                onError={(e) => { e.target.style.display = 'none'; }} />
               <h3 style={{ fontWeight: 700, color: '#1e293b', marginBottom: 5 }}>
                 <i className="fas fa-calendar-check" style={{ marginRight: 10, color: '#f59e0b' }}></i>
-                Complete Your Booking
+                Book: {modalRoom.room_name || `Room ${modalRoom.index + 1}`}
               </h3>
-              <p style={{ color: '#64748b' }}>Fill in your details to reserve your room</p>
+              <p style={{ color: '#64748b' }}>₹{modalRoom.price_per_day?.toLocaleString()}/night — Fill in your details to reserve</p>
             </div>
 
             {/* Info Cards */}
@@ -357,22 +370,22 @@ const RoomBooking = () => {
               ))}
             </div>
 
-            <form onSubmit={handleBooking}>
-              <input type="hidden" name="room_id" value={selectedRoom.id} />
+            <form onSubmit={handleModalBooking}>
+              <input type="hidden" name="room_id" value={modalRoom._id} />
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 16 }}>
                 <div>
                   <label style={{ fontWeight: 600, color: '#374151', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <i className="fas fa-user" style={{ color: '#f59e0b' }}></i> Guest Name
                   </label>
-                  <input type="text" name="guest_name" value={formData.guest_name} onChange={handleChange}
+                  <input type="text" name="guest_name" value={modalForm.guest_name} onChange={handleModalFormChange}
                     placeholder="Enter guest name" required style={inputStyle} />
                 </div>
                 <div>
                   <label style={{ fontWeight: 600, color: '#374151', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <i className="fas fa-phone" style={{ color: '#f59e0b' }}></i> Phone Number
                   </label>
-                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange}
+                  <input type="tel" name="phone" value={modalForm.phone} onChange={handleModalFormChange}
                     placeholder="Enter phone number" required pattern="[0-9]{10}" style={inputStyle} />
                 </div>
               </div>
@@ -381,7 +394,7 @@ const RoomBooking = () => {
                 <label style={{ fontWeight: 600, color: '#374151', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                   <i className="fas fa-envelope" style={{ color: '#f59e0b' }}></i> Email (Optional)
                 </label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange}
+                <input type="email" name="email" value={modalForm.email} onChange={handleModalFormChange}
                   placeholder="Enter email address" style={inputStyle} />
               </div>
 
@@ -390,19 +403,15 @@ const RoomBooking = () => {
                   <label style={{ fontWeight: 600, color: '#374151', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <i className="fas fa-calendar-alt" style={{ color: '#f59e0b' }}></i> Check-in Date
                   </label>
-                  <input type="date" name="check_in" value={formData.check_in} onChange={(e) => {
-                    handleChange(e);
-                    calculateTotal(e.target.value, formData.check_out, selectedRoom.price_per_day);
-                  }} min={getTodayDate()} required style={inputStyle} />
+                  <input type="date" name="check_in" value={modalForm.check_in} onChange={handleModalFormChange}
+                    min={getTodayDate()} required style={inputStyle} />
                 </div>
                 <div>
                   <label style={{ fontWeight: 600, color: '#374151', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <i className="fas fa-calendar-alt" style={{ color: '#f59e0b' }}></i> Check-out Date
                   </label>
-                  <input type="date" name="check_out" value={formData.check_out} onChange={(e) => {
-                    handleChange(e);
-                    calculateTotal(formData.check_in, e.target.value, selectedRoom.price_per_day);
-                  }} min={getTomorrowDate()} required style={inputStyle} />
+                  <input type="date" name="check_out" value={modalForm.check_out} onChange={handleModalFormChange}
+                    min={getTomorrowDate()} required style={inputStyle} />
                 </div>
               </div>
 
@@ -411,7 +420,7 @@ const RoomBooking = () => {
                   <label style={{ fontWeight: 600, color: '#374151', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                     <i className="fas fa-users" style={{ color: '#f59e0b' }}></i> Number of Guests
                   </label>
-                  <select name="no_of_guests" value={formData.no_of_guests} onChange={handleChange}
+                  <select name="no_of_guests" value={modalForm.no_of_guests} onChange={handleModalFormChange}
                     style={{ ...inputStyle, cursor: 'pointer' }}>
                     <option value="1">1 Guest</option>
                     <option value="2">2 Guests</option>
@@ -429,7 +438,7 @@ const RoomBooking = () => {
                     border: '2px solid #f59e0b', borderRadius: 12, padding: '14px 18px',
                     fontWeight: 700, fontSize: '1.2rem', color: '#f59e0b', textAlign: 'center'
                   }}>
-                    {totalAmount > 0 ? `₹${totalAmount.toLocaleString()} for ${Math.ceil((new Date(formData.check_out) - new Date(formData.check_in)) / (1000 * 60 * 60 * 24))} night(s)` : 'Select Dates'}
+                    {modalTotal > 0 ? `₹${modalTotal.toLocaleString()} for ${Math.ceil((new Date(modalForm.check_out) - new Date(modalForm.check_in)) / (1000 * 60 * 60 * 24))} night(s)` : 'Select Dates'}
                   </div>
                 </div>
               </div>
@@ -457,13 +466,13 @@ const RoomBooking = () => {
                 }}
               >
                 {loading ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-hotel"></i>}
-                {loading ? 'Processing Booking...' : 'Book This Room'}
+                {loading ? 'Processing Booking...' : `Book for ₹${modalTotal > 0 ? modalTotal.toLocaleString() : modalRoom.price_per_day?.toLocaleString()}`}
               </button>
             </form>
 
             {/* Quick Links */}
             <div style={{ display: 'flex', gap: 15, justifyContent: 'center', marginTop: 30, flexWrap: 'wrap' }}>
-              <a href="/room_booking/history" style={{
+              <a href="/bookings/history" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 padding: '12px 24px', background: '#f1f5f9', color: '#64748b',
                 borderRadius: 12, textDecoration: 'none', fontWeight: 500,
@@ -483,6 +492,8 @@ const RoomBooking = () => {
                 <i className="fas fa-history"></i> View Booking History
               </a>
             </div>
+          </div>
+        </div>
           </div>
         )}
       </div>
