@@ -2,15 +2,44 @@
                     TEMPLE ERP SYSTEM - HOW TO RUN
 ================================================================================
 
-OPEN TWO TERMINAL WINDOWS:
+PREREQUISITES:
+    - Node.js (v16 or higher)
+    - MongoDB (local or MongoDB Atlas)
 
-TERMINAL 1 (Backend):
-    cd "D:\Project re\backend"
-    npm run dev
+STEP 1: INSTALL DEPENDENCIES
 
-TERMINAL 2 (Frontend):
-    cd "D:\Project re\frontend"
-    npm run dev
+    Backend:
+        cd "D:\Temple ERP System\backend"
+        npm install
+
+    Frontend:
+        cd "D:\Temple ERP System\frontend"
+        npm install
+
+STEP 2: SETUP ENVIRONMENT VARIABLES
+
+    Backend (.env file in backend/):
+        PORT=5000
+        MONGODB_URI=mongodb://localhost:27017/temple_erp
+        JWT_SECRET=your_super_secret_jwt_key_here
+        FRONTEND_URL=http://localhost:5173
+
+    Frontend (.env file in frontend/):
+        VITE_API_URL=http://localhost:5000/api
+
+STEP 3: START MONGODB
+    - Local: Start MongoDB service (mongod)
+    - Atlas: Use your MongoDB Atlas connection string
+
+STEP 4: RUN THE APPLICATION (OPEN TWO TERMINAL WINDOWS)
+
+    TERMINAL 1 (Backend):
+        cd "D:\Temple ERP System\backend"
+        npm run dev
+
+    TERMINAL 2 (Frontend):
+        cd "D:\Temple ERP System\frontend"
+        npm run dev
 
 ================================================================================
 OPEN BROWSER:
@@ -19,6 +48,9 @@ OPEN BROWSER:
 ADMIN LOGIN:
     Email: suyogshirsat2004@gmail.com
     Password: suyog2004
+
+API HEALTH CHECK:
+    http://localhost:5000/api/health
 
 STOP:
     Press Ctrl+C in both terminals
