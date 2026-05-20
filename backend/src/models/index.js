@@ -11,6 +11,7 @@ const News = require('./News');
 const Notification = require('./Notification');
 const PassType = require('./PassType');
 const TempleUpdate = require('./TempleUpdate');
+const LoginRecord = require('./LoginRecord');
 
 module.exports = {
   User,
@@ -25,5 +26,6 @@ module.exports = {
   News,
   Notification,
   PassType,
-  TempleUpdate
+  TempleUpdate,
+  LoginRecord
 };

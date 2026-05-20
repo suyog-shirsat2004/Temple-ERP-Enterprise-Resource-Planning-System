@@ -26,8 +26,5 @@ npm-debug.log*
 # Backend uploads (user data)
 backend/src/uploads/
 
-# Images directory (only frontend/public/images needed)
-images/
-
-# Screenshots
-Screenshots/
+# Root images directory only
+/images/

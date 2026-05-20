@@ -1,5 +1,18 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
+const { User, LoginRecord } = require('../models');
+
+const parseDeviceInfo = (userAgent) => {
+  if (!userAgent) return 'Unknown';
+  const info = [];
+  if (/windows/i.test(userAgent)) info.push('Windows');
+  else if (/macintosh|mac os x/i.test(userAgent)) info.push('macOS');
+  else if (/linux/i.test(userAgent)) info.push('Linux');
+  if (/chrome/i.test(userAgent)) info.push('Chrome');
+  else if (/firefox/i.test(userAgent)) info.push('Firefox');
+  else if (/safari/i.test(userAgent)) info.push('Safari');
+  else if (/edge/i.test(userAgent)) info.push('Edge');
+  return info.length > 0 ? info.join(', ') : userAgent.substring(0, 50);
+};
 
 const register = async (req, res) => {
   try {
@@ -47,13 +60,39 @@ const login = async (req, res) => {
     const user = await User.findOne({ $or: [{ email: username }, { username }] });
 
     if (!user) {
+      await LoginRecord.create({
+        user_id: null,
+        username,
+        ip_address: req.ip || req.connection.remoteAddress,
+        user_agent: req.headers['user-agent'],
+        login_method: 'password',
+        success: false
+      });
       return res.status(401).json({ success: false, message: 'User not found. Please register first.' });
     }
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
+      await LoginRecord.create({
+        user_id: user._id,
+        username: user.username || user.email,
+        ip_address: req.ip || req.connection.remoteAddress,
+        user_agent: req.headers['user-agent'],
+        login_method: 'password',
+        success: false
+      });
       return res.status(401).json({ success: false, message: 'Invalid password. Please try again.' });
     }
+
+    await LoginRecord.create({
+      user_id: user._id,
+      username: user.username || user.email,
+      ip_address: req.ip || req.connection.remoteAddress,
+      user_agent: req.headers['user-agent'],
+      login_method: 'password',
+      success: true,
+      device_info: parseDeviceInfo(req.headers['user-agent'])
+    });
 
     const expiresIn = remember ? '30d' : process.env.JWT_EXPIRE;
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn });
@@ -74,10 +113,27 @@ const adminLogin = async (req, res) => {
     const { username, password } = req.body;
 
     if (username === 'suyogshirsat2004@gmail.com' && password === 'suyog2004') {
+      await LoginRecord.create({
+        user_id: null,
+        username: 'admin',
+        ip_address: req.ip || req.connection.remoteAddress,
+        user_agent: req.headers['user-agent'],
+        login_method: 'admin',
+        success: true,
+        device_info: parseDeviceInfo(req.headers['user-agent'])
+      });
       const token = jwt.sign({ id: 'admin', isAdmin: true }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
       return res.json({ success: true, message: 'Admin login successful', token, user: { id: 'admin', name: 'Admin', role: 'admin' } });
     }
 
+    await LoginRecord.create({
+      user_id: null,
+      username: username || 'unknown',
+      ip_address: req.ip || req.connection.remoteAddress,
+      user_agent: req.headers['user-agent'],
+      login_method: 'admin',
+      success: false
+    });
     res.status(401).json({ success: false, message: 'Invalid admin credentials' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Admin login failed', error: error.message });
@@ -161,4 +217,38 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { register, login, adminLogin, resetPassword, changePassword, getProfile, updateProfile };
+const getLoginHistory = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    let query = {};
+    if (req.userId !== 'admin' && !req.isAdmin) {
+      query.user_id = req.userId;
+    }
+
+    const records = await LoginRecord.find(query)
+      .sort({ login_at: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate('user_id', 'name email');
+
+    const total = await LoginRecord.countDocuments(query);
+
+    res.json({
+      success: true,
+      records,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to fetch login history', error: error.message });
+  }
+};
+
+module.exports = { register, login, adminLogin, resetPassword, changePassword, getProfile, updateProfile, getLoginHistory };

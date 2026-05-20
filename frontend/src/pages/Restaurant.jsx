@@ -14,13 +14,40 @@ const Restaurant = () => {
 
   const menuImages = ['re1.jpg', 're2.jpg', 're4.jpg', 're5.jpg', 're7.webp', 'rre3.jpg'];
 
+  const defaultMenuItems = [
+    { id: 1, item_name: 'Puri Bhaji', category: 'breakfast', price: 80, description: 'Crispy fried puris served with spicy potato bhaji', is_veg: true },
+    { id: 2, item_name: 'Poha', category: 'breakfast', price: 50, description: 'Flattened rice tempered with mustard, curry leaves & peanuts', is_veg: true },
+    { id: 3, item_name: 'Upma', category: 'breakfast', price: 60, description: 'Savory semolina porridge with vegetables & ghee', is_veg: true },
+    { id: 4, item_name: 'Idli Sambhar', category: 'breakfast', price: 70, description: 'Steamed rice cakes served with lentil soup & chutney', is_veg: true },
+    { id: 5, item_name: 'Veg Thali', category: 'meals', price: 180, description: 'Complete meal with dal, rice, roti, sabzi, salad & dessert', is_veg: true },
+    { id: 6, item_name: 'Pulav', category: 'meals', price: 120, description: 'Fragrant basmati rice cooked with mixed vegetables & spices', is_veg: true },
+    { id: 7, item_name: 'Chapati Bhaji', category: 'meals', price: 100, description: 'Whole wheat chapatis with seasonal vegetable curry', is_veg: true },
+    { id: 8, item_name: 'Dal Khichdi', category: 'meals', price: 110, description: 'Comforting rice & lentil porridge tempered with ghee', is_veg: true },
+    { id: 9, item_name: 'Masala Dosa', category: 'breakfast', price: 90, description: 'Crispy rice crepe filled with spiced potato filling', is_veg: true },
+    { id: 10, item_name: 'Butter Milk', category: 'beverages', price: 30, description: 'Refreshing spiced buttermilk with cumin & mint', is_veg: true },
+    { id: 11, item_name: 'Tea', category: 'beverages', price: 20, description: 'Aromatic Indian chai with ginger & cardamom', is_veg: true },
+    { id: 12, item_name: 'Coffee', category: 'beverages', price: 30, description: 'Filter coffee brewed to perfection', is_veg: true },
+    { id: 13, item_name: 'Shrikhand', category: 'special', price: 80, description: 'Creamy sweetened yogurt dessert with saffron & nuts', is_veg: true },
+    { id: 14, item_name: 'Kheer', category: 'special', price: 60, description: 'Rice pudding slow-cooked with milk, cardamom & dry fruits', is_veg: true },
+    { id: 15, item_name: 'Prasad Special', category: 'special', price: 50, description: 'Blessed temple prasad - sweet offering of the day', is_veg: true },
+  ];
+
   useEffect(() => {
     api.get('/restaurant/menu').then(res => {
-      setMenuItems(res.data.menu_items || []);
-      const cats = [...new Set((res.data.menu_items || []).map(item => item.category))];
-      setCategories(cats);
+      const items = res.data.menu_items || [];
+      if (items.length > 0) {
+        setMenuItems(items);
+        const cats = [...new Set(items.map(item => item.category))];
+        setCategories(cats);
+      } else {
+        setMenuItems(defaultMenuItems);
+        const cats = [...new Set(defaultMenuItems.map(item => item.category))];
+        setCategories(cats);
+      }
     }).catch(() => {
-      setMenuItems([]);
+      setMenuItems(defaultMenuItems);
+      const cats = [...new Set(defaultMenuItems.map(item => item.category))];
+      setCategories(cats);
     });
   }, []);
 

@@ -107,7 +107,7 @@ const Home = () => {
                         <i className="fas fa-user-circle me-3 text-primary"></i>My Profile
                       </Link>
                       <Link to="/passes" style={dropdownItem} onClick={() => setProfileOpen(false)}>
-                        <i className="fas fa-ticket-alt me-3 text-success"></i>My Passes
+                        <i className="fas fa-receipt me-3 text-success"></i>My Receipts
                       </Link>
                       <div style={divider} />
                       <button onClick={() => { logout(); setProfileOpen(false); navigate('/'); }} style={{
@@ -466,10 +466,10 @@ const Home = () => {
               </p>
               <div style={{ display: 'flex', gap: 12 }}>
                 {['fa-facebook-f', 'fa-instagram', 'fa-youtube', 'fa-twitter'].map((icon, i) => (
-                  <a key={i} href="#" style={{
+                  <span key={i} style={{
                     width: 40, height: 40, background: 'rgba(255,255,255,0.1)', borderRadius: '50%',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff',
-                    textDecoration: 'none', transition: 'all 0.3s ease', fontSize: 14
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#fff',
+                    textDecoration: 'none', transition: 'all 0.3s ease', fontSize: 14, cursor: 'pointer'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = 'linear-gradient(135deg, #ff6b35, #f7931e)';
@@ -481,7 +481,7 @@ const Home = () => {
                   }}
                   >
                     <i className={`fab ${icon}`}></i>
-                  </a>
+                  </span>
                 ))}
               </div>
             </div>

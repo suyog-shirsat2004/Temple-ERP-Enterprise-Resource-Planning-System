@@ -179,7 +179,7 @@ const Navbar = ({ isAdmin = false }) => {
                       <i className="fas fa-user-circle me-3 text-primary"></i>My Profile
                     </Link>
                     <Link to="/passes" style={dropdownItemStyle} onClick={() => setProfileOpen(false)}>
-                      <i className="fas fa-ticket-alt me-3 text-success"></i>My Passes
+                      <i className="fas fa-receipt me-3 text-success"></i>My Receipts
                     </Link>
                     <Link to="/bookings" style={dropdownItemStyle} onClick={() => setProfileOpen(false)}>
                       <i className="fas fa-hotel me-3 text-warning"></i>My Bookings

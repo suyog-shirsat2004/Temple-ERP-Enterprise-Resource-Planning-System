@@ -2,7 +2,20 @@ const { RoomBooking, Room, User, Notification } = require('../models');
 
 const getAllRooms = async (req, res) => {
   try {
-    const rooms = await Room.find({ status: 'available' }).sort({ price_per_day: 1 });
+    let rooms = await Room.find({ status: 'available' }).sort({ price_per_day: 1 });
+    if (rooms.length === 0) {
+      const defaultRooms = [
+        { room_number: '101', room_name: 'Standard Room 101', room_type: 'standard', price_per_day: 1500, description: 'Comfortable room with basic amenities for a peaceful stay', status: 'available' },
+        { room_number: '201', room_name: 'Deluxe Room 201', room_type: 'deluxe', price_per_day: 2500, description: 'Spacious room with premium furnishings and modern amenities', status: 'available' },
+        { room_number: '301', room_name: 'Suite Room 301', room_type: 'suite', price_per_day: 4000, description: 'Luxurious suite with exclusive amenities and stunning views', status: 'available' },
+        { room_number: '102', room_name: 'Premium Room 102', room_type: 'premium', price_per_day: 3000, description: 'Premium room with exclusive facilities and services', status: 'available' },
+        { room_number: '202', room_name: 'AC Room 202', room_type: 'ac', price_per_day: 2000, description: 'Air-conditioned room for ultimate comfort', status: 'available' },
+        { room_number: '103', room_name: 'Non-AC Room 103', room_type: 'non-ac', price_per_day: 1000, description: 'Economical room with natural ventilation', status: 'available' },
+        { room_number: '104', room_name: 'Standard Room 104', room_type: 'standard', price_per_day: 1500, description: 'Clean and comfortable with temple views', status: 'available' },
+        { room_number: '203', room_name: 'Deluxe Suite 203', room_type: 'deluxe', price_per_day: 3500, description: 'Premium deluxe room with modern amenities and temple view', status: 'available' },
+      ];
+      rooms = await Room.insertMany(defaultRooms);
+    }
     res.json({ success: true, rooms });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to get rooms', error: error.message });
@@ -11,7 +24,20 @@ const getAllRooms = async (req, res) => {
 
 const getAllRoomsAdmin = async (req, res) => {
   try {
-    const rooms = await Room.find().sort({ _id: -1 });
+    let rooms = await Room.find().sort({ _id: -1 });
+    if (rooms.length === 0) {
+      const defaultRooms = [
+        { room_number: '101', room_name: 'Standard Room 101', room_type: 'standard', price_per_day: 1500, description: 'Comfortable room with basic amenities for a peaceful stay', status: 'available' },
+        { room_number: '201', room_name: 'Deluxe Room 201', room_type: 'deluxe', price_per_day: 2500, description: 'Spacious room with premium furnishings and modern amenities', status: 'available' },
+        { room_number: '301', room_name: 'Suite Room 301', room_type: 'suite', price_per_day: 4000, description: 'Luxurious suite with exclusive amenities and stunning views', status: 'available' },
+        { room_number: '102', room_name: 'Premium Room 102', room_type: 'premium', price_per_day: 3000, description: 'Premium room with exclusive facilities and services', status: 'available' },
+        { room_number: '202', room_name: 'AC Room 202', room_type: 'ac', price_per_day: 2000, description: 'Air-conditioned room for ultimate comfort', status: 'available' },
+        { room_number: '103', room_name: 'Non-AC Room 103', room_type: 'non-ac', price_per_day: 1000, description: 'Economical room with natural ventilation', status: 'available' },
+        { room_number: '104', room_name: 'Standard Room 104', room_type: 'standard', price_per_day: 1500, description: 'Clean and comfortable with temple views', status: 'available' },
+        { room_number: '203', room_name: 'Deluxe Suite 203', room_type: 'deluxe', price_per_day: 3500, description: 'Premium deluxe room with modern amenities and temple view', status: 'available' },
+      ];
+      rooms = await Room.insertMany(defaultRooms);
+    }
     res.json({ success: true, rooms });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to get rooms', error: error.message });

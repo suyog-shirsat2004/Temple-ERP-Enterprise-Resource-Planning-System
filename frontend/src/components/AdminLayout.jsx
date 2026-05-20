@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../context/AuthContext.jsx';
+import api from '../services/api';
 
 const AdminLayout = ({ children, title }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    api.get('/admin/dashboard').then(res => {
+      setStats(res.data.stats);
+    }).catch(() => {});
+  }, []);
 
   const menuSections = [
     {
@@ -16,29 +24,22 @@ const AdminLayout = ({ children, title }) => {
       ]
     },
     {
-      title: 'Services',
+      title: 'Management',
       items: [
-        { icon: 'fas fa-ticket-alt', label: 'Darshan Passes', path: '/admin/passes' },
+        { icon: 'fas fa-ticket-alt', label: 'Darshan Passes', path: '/admin/passes', badge: stats?.pending_passes || 0 },
         { icon: 'fas fa-hotel', label: 'Room Bookings', path: '/admin/bookings' },
-        { icon: 'fas fa-door-open', label: 'Room Management', path: '/admin/rooms' },
-        { icon: 'fas fa-utensils', label: 'Restaurant', path: '/admin/restaurant' },
-        { icon: 'fas fa-donate', label: 'Donations', path: '/admin/donations' }
+        { icon: 'fas fa-credit-card', label: 'Transactions', path: '/admin/donations' },
+        { icon: 'fas fa-donate', label: 'Donations', path: '/admin/donations', badge: stats?.pending_donations || 0 },
+        { icon: 'fas fa-users', label: 'Devotees', path: '/admin/devotees' },
+        { icon: 'fas fa-utensils', label: 'Restaurant', path: '/admin/restaurant' }
       ]
     },
     {
       title: 'Content',
       items: [
-        { icon: 'fas fa-calendar-star', label: 'Festivals', path: '/admin/festivals' },
+        { icon: 'fas fa-star', label: 'Festivals', path: '/admin/festivals' },
         { icon: 'fas fa-calendar-alt', label: 'Events', path: '/admin/events' },
-        { icon: 'fas fa-newspaper', label: 'News', path: '/admin/news' },
-        { icon: 'fas fa-bullhorn', label: 'Temple Updates', path: '/admin/updates' }
-      ]
-    },
-    {
-      title: 'Users',
-      items: [
-        { icon: 'fas fa-users', label: 'Devotees', path: '/admin/devotees' },
-        { icon: 'fas fa-user-shield', label: 'Admin Users', path: '/admin/users' }
+        { icon: 'fas fa-newspaper', label: 'News', path: '/admin/news' }
       ]
     },
     {
@@ -60,61 +61,69 @@ const AdminLayout = ({ children, title }) => {
   };
 
   return (
-    <div style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif", background: '#f1f5f9', minHeight: '100vh' }}>
+    <div style={{ fontFamily: "'Inter', 'Segoe UI', sans-serif", background: '#f8fafc', minHeight: '100vh' }}>
       {/* Sidebar */}
       <aside style={{
         position: 'fixed', top: 0, left: 0, width: 260, height: '100vh',
-        background: 'linear-gradient(180deg, #1e1b4b 0%, #312e81 100%)',
+        background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
         zIndex: 1000, transition: 'all 0.3s ease',
-        overflowY: 'auto', transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)'
+        overflowY: 'auto', overflowX: 'hidden', transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)'
       }}>
         <Link to="/admin" style={{
-          padding: '20px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)',
-          display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none'
+          padding: '24px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)',
+          display: 'flex', alignItems: 'center', gap: 14, textDecoration: 'none'
         }}>
           <div style={{
-            width: 40, height: 40, background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-            borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontSize: 20
+            width: 48, height: 48, background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+            borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#fff', fontSize: 24
           }}>
             <i className="fas fa-om"></i>
           </div>
-          <div style={{ color: '#fff' }}>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>Temple ERP</div>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>Admin Panel</div>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 18, color: '#fff' }}>Temple ERP</div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Admin Panel</div>
           </div>
         </Link>
 
-        <nav style={{ padding: '12px 10px' }}>
+        <nav style={{ padding: '16px 12px' }}>
           {menuSections.map((section, si) => (
-            <div key={si} style={{ marginBottom: 6 }}>
+            <div key={si} style={{ marginBottom: 8 }}>
               <div style={{
-                fontSize: 10, textTransform: 'uppercase', letterSpacing: 1.2,
-                color: 'rgba(255,255,255,0.35)', padding: '10px 10px 6px', fontWeight: 600
+                fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.5,
+                color: 'rgba(255,255,255,0.3)', padding: '8px 14px 8px', fontWeight: 600
               }}>{section.title}</div>
               {section.items.map((item, ii) => (
                 <Link key={ii} to={item.path} style={{
-                  display: 'flex', alignItems: 'center', padding: '10px 14px',
-                  color: isActive(item.path) ? '#fff' : 'rgba(255,255,255,0.65)',
-                  textDecoration: 'none', borderRadius: 8, marginBottom: 2,
-                  background: isActive(item.path) ? 'rgba(245, 158, 11, 0.2)' : 'transparent',
-                  borderLeft: isActive(item.path) ? '3px solid #f59e0b' : '3px solid transparent',
+                  display: 'flex', alignItems: 'center', padding: '12px 14px',
+                  color: isActive(item.path) ? '#fff' : 'rgba(255,255,255,0.6)',
+                  textDecoration: 'none', borderRadius: 10, marginBottom: 4,
+                  background: isActive(item.path) ? 'rgba(139, 92, 246, 0.2)' : 'transparent',
                   transition: 'all 0.2s ease'
-                }}>
-                  <i className={item.icon} style={{ width: 20, fontSize: 15, marginRight: 10 }}></i>
-                  <span style={{ fontSize: 13.5, fontWeight: isActive(item.path) ? 600 : 400 }}>{item.label}</span>
+                }}
+                onMouseEnter={(e) => { if (!isActive(item.path)) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                onMouseLeave={(e) => { if (!isActive(item.path)) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <i className={item.icon} style={{ width: 22, fontSize: 16, marginRight: 12, textAlign: 'center' }}></i>
+                  <span style={{ fontSize: 14, fontWeight: isActive(item.path) ? 600 : 400, flex: 1 }}>{item.label}</span>
+                  {item.badge > 0 && (
+                    <span style={{
+                      fontSize: 11, padding: '2px 8px', borderRadius: 10, fontWeight: 600,
+                      background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.8)'
+                    }}>{item.badge}</span>
+                  )}
                 </Link>
               ))}
             </div>
           ))}
 
-          <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
             <button onClick={handleLogout} style={{
-              display: 'flex', alignItems: 'center', width: '100%', padding: '10px 14px',
-              color: '#f87171', background: 'none', border: 'none', borderRadius: 8,
-              cursor: 'pointer', fontSize: 13.5, fontWeight: 500
+              display: 'flex', alignItems: 'center', width: '100%', padding: '12px 14px',
+              color: '#f87171', background: 'none', border: 'none', borderRadius: 10,
+              cursor: 'pointer', fontSize: 14, fontWeight: 500
             }}>
-              <i className="fas fa-sign-out-alt" style={{ width: 20, marginRight: 10 }}></i>
+              <i className="fas fa-sign-out-alt" style={{ width: 22, marginRight: 12 }}></i>
               Logout
             </button>
           </div>
@@ -134,36 +143,36 @@ const AdminLayout = ({ children, title }) => {
       }}>
         {/* Topbar */}
         <div style={{
-          background: '#fff', padding: '12px 24px', display: 'flex',
+          background: '#fff', padding: '16px 32px', display: 'flex',
           justifyContent: 'space-between', alignItems: 'center',
           boxShadow: '0 1px 3px rgba(0,0,0,0.08)', position: 'sticky', top: 0, zIndex: 100
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{
-              background: '#f8fafc', border: 'none', width: 36, height: 36,
-              borderRadius: 8, cursor: 'pointer', color: '#475569', fontSize: 16
+              background: '#f8fafc', border: '1px solid #e2e8f0', width: 40, height: 40,
+              borderRadius: 10, cursor: 'pointer', color: '#475569', fontSize: 16,
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
             }}>
               <i className="fas fa-bars"></i>
             </button>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1e293b', margin: 0 }}>{title || 'Dashboard'}</h2>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div>
+              <div style={{ fontWeight: 700, color: '#1e293b', fontSize: 15 }}>{user?.name || 'Admin'}</div>
+              <div style={{ fontSize: 12, color: '#94a3b8' }}>{user?.email || 'admin@temple.com'}</div>
+            </div>
             <div style={{
-              width: 36, height: 36, background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-              borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', fontWeight: 600, fontSize: 14
+              width: 44, height: 44, background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+              borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff', fontWeight: 700, fontSize: 16
             }}>
               {user?.name?.charAt(0)?.toUpperCase() || 'A'}
-            </div>
-            <div>
-              <div style={{ fontWeight: 600, color: '#1e293b', fontSize: 13 }}>{user?.name || 'Admin'}</div>
-              <div style={{ fontSize: 11, color: '#94a3b8' }}>Administrator</div>
             </div>
           </div>
         </div>
 
         {/* Page Content */}
-        <div style={{ padding: 24 }}>
+        <div style={{ padding: '24px 32px' }}>
           {children}
         </div>
       </main>

@@ -982,14 +982,20 @@ vercel
 
 ## 📸 Screenshots
 
-_Add screenshots here:_
-- Home page
-- Devotee dashboard
-- Pass booking form
-- Admin analytics
-- Room booking
-- Restaurant ordering
-- Donation receipt
+<div align="center">
+
+| | |
+|:---:|:---:|
+| **🏠 Home Page** | **👤 Devotee Dashboard** |
+| ![Home](Screenshots/Home.png) | ![Dashboard](Screenshots/Devotee%20dashboard.png) |
+| **🎫 Pass Booking Form** | **📊 Admin Analytics** |
+| ![Pass Booking](Screenshots/Pass%20booking%20form.png) | ![Admin](Screenshots/Admin%20analytics.png) |
+| **🏨 Room Booking** | **🍽️ Restaurant Ordering** |
+| ![Room Booking](Screenshots/Room%20booking.png) | ![Restaurant](Screenshots/Restaurant%20ordering.png) |
+| **🧾 Donation Receipt** | |
+| ![Donation](Screenshots/Donation%20receipt.png) | |
+
+</div>
 
 ---
 
