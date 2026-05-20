@@ -84,6 +84,54 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
+const addMenuItem = async (req, res) => {
+  try {
+    const { item_name, category, price, description, is_veg, available } = req.body;
+    const menuItem = await RestaurantMenu.create({
+      name: item_name, category, price, description,
+      is_veg: is_veg !== undefined ? is_veg : true,
+      available: available !== undefined ? available : true
+    });
+    res.status(201).json({ success: true, message: 'Menu item added', menuItem });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to add menu item', error: error.message });
+  }
+};
+
+const updateMenuItem = async (req, res) => {
+  try {
+    const menuItem = await RestaurantMenu.findById(req.params.id);
+    if (!menuItem) return res.status(404).json({ success: false, message: 'Menu item not found' });
+
+    const { item_name, category, price, description, is_veg, available } = req.body;
+    if (item_name) menuItem.name = item_name;
+    if (category) menuItem.category = category;
+    if (price) menuItem.price = price;
+    if (description) menuItem.description = description;
+    if (is_veg !== undefined) menuItem.is_veg = is_veg;
+    if (available !== undefined) menuItem.available = available;
+
+    await menuItem.save();
+    res.json({ success: true, message: 'Menu item updated', menuItem });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update menu item', error: error.message });
+  }
+};
+
+const deleteMenuItem = async (req, res) => {
+  try {
+    const result = await RestaurantMenu.findByIdAndDelete(req.params.id);
+    if (result) {
+      res.json({ success: true, message: 'Menu item deleted' });
+    } else {
+      res.status(404).json({ success: false, message: 'Menu item not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete menu item', error: error.message });
+  }
+};
+
 module.exports = {
-  getMenu, getUserOrders, placeOrder, getOrder, getAllOrders, updateOrderStatus
+  getMenu, getUserOrders, placeOrder, getOrder, getAllOrders, updateOrderStatus,
+  addMenuItem, updateMenuItem, deleteMenuItem
 };

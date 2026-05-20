@@ -163,7 +163,52 @@ const cancelBookingAdmin = async (req, res) => {
   }
 };
 
+const createRoom = async (req, res) => {
+  try {
+    const { room_number, room_name, room_type, price_per_day, description, amenities } = req.body;
+    const room = await Room.create({ room_number, room_name, room_type, price_per_day, description, amenities, status: 'available' });
+    res.status(201).json({ success: true, message: 'Room added successfully', room });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to add room', error: error.message });
+  }
+};
+
+const updateRoom = async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    if (!room) return res.status(404).json({ success: false, message: 'Room not found' });
+
+    const { room_number, room_name, room_type, price_per_day, description, amenities, status } = req.body;
+    if (room_number) room.room_number = room_number;
+    if (room_name) room.room_name = room_name;
+    if (room_type) room.room_type = room_type;
+    if (price_per_day) room.price_per_day = price_per_day;
+    if (description) room.description = description;
+    if (amenities) room.amenities = amenities;
+    if (status) room.status = status;
+
+    await room.save();
+    res.json({ success: true, message: 'Room updated successfully', room });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update room', error: error.message });
+  }
+};
+
+const deleteRoom = async (req, res) => {
+  try {
+    const result = await Room.findByIdAndDelete(req.params.id);
+    if (result) {
+      res.json({ success: true, message: 'Room deleted successfully' });
+    } else {
+      res.status(404).json({ success: false, message: 'Room not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete room', error: error.message });
+  }
+};
+
 module.exports = {
   getAllRooms, getAllRoomsAdmin, getUserBookings, getAllBookings, getBookingById,
-  createBooking, processPayment, cancelBooking, confirmBooking, cancelBookingAdmin
+  createBooking, processPayment, cancelBooking, confirmBooking, cancelBookingAdmin,
+  createRoom, updateRoom, deleteRoom
 };

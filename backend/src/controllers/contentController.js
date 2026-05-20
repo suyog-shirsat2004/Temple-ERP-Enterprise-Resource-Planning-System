@@ -139,7 +139,130 @@ const toggleTempleUpdateStatus = async (req, res) => {
   }
 };
 
+const createFestival = async (req, res) => {
+  try {
+    const { name, description, event_date, event_time } = req.body;
+    const festival = await Festival.create({
+      name, description, event_date, event_time,
+      image: req.file ? req.file.filename : null, status: 'active'
+    });
+    res.status(201).json({ success: true, message: 'Festival added', festival });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to add festival', error: error.message });
+  }
+};
+
+const updateFestival = async (req, res) => {
+  try {
+    const festival = await Festival.findById(req.params.id);
+    if (!festival) return res.status(404).json({ success: false, message: 'Festival not found' });
+    const { name, description, event_date, event_time, status } = req.body;
+    if (name) festival.name = name;
+    if (description) festival.description = description;
+    if (event_date) festival.event_date = event_date;
+    if (event_time) festival.event_time = event_time;
+    if (status) festival.status = status;
+    if (req.file) festival.image = req.file.filename;
+    await festival.save();
+    res.json({ success: true, message: 'Festival updated', festival });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update festival', error: error.message });
+  }
+};
+
+const deleteFestival = async (req, res) => {
+  try {
+    const result = await Festival.findByIdAndDelete(req.params.id);
+    if (result) res.json({ success: true, message: 'Festival deleted' });
+    else res.status(404).json({ success: false, message: 'Festival not found' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete festival', error: error.message });
+  }
+};
+
+const createEvent = async (req, res) => {
+  try {
+    const { title, description, event_date, event_time } = req.body;
+    const event = await Event.create({
+      title, description, event_date, event_time,
+      image: req.file ? req.file.filename : null, status: 'upcoming'
+    });
+    res.status(201).json({ success: true, message: 'Event added', event });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to add event', error: error.message });
+  }
+};
+
+const updateEvent = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
+    const { title, description, event_date, event_time, status } = req.body;
+    if (title) event.title = title;
+    if (description) event.description = description;
+    if (event_date) event.event_date = event_date;
+    if (event_time) event.event_time = event_time;
+    if (status) event.status = status;
+    if (req.file) event.image = req.file.filename;
+    await event.save();
+    res.json({ success: true, message: 'Event updated', event });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update event', error: error.message });
+  }
+};
+
+const deleteEvent = async (req, res) => {
+  try {
+    const result = await Event.findByIdAndDelete(req.params.id);
+    if (result) res.json({ success: true, message: 'Event deleted' });
+    else res.status(404).json({ success: false, message: 'Event not found' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete event', error: error.message });
+  }
+};
+
+const createNews = async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const news = await News.create({
+      title, content, image: req.file ? req.file.filename : null, status: 'active'
+    });
+    res.status(201).json({ success: true, message: 'News added', news });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to add news', error: error.message });
+  }
+};
+
+const updateNews = async (req, res) => {
+  try {
+    const news = await News.findById(req.params.id);
+    if (!news) return res.status(404).json({ success: false, message: 'News not found' });
+    const { title, content, status } = req.body;
+    if (title) news.title = title;
+    if (content) news.content = content;
+    if (status) news.status = status;
+    if (req.file) news.image = req.file.filename;
+    await news.save();
+    res.json({ success: true, message: 'News updated', news });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update news', error: error.message });
+  }
+};
+
+const deleteNews = async (req, res) => {
+  try {
+    const result = await News.findByIdAndDelete(req.params.id);
+    if (result) res.json({ success: true, message: 'News deleted' });
+    else res.status(404).json({ success: false, message: 'News not found' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to delete news', error: error.message });
+  }
+};
+
 module.exports = {
   getFestivals, getEvents, getNews, getTempleUpdates,
-  createTempleUpdate, updateTempleUpdate, deleteTempleUpdate, toggleTempleUpdateStatus
+  createTempleUpdate, updateTempleUpdate, deleteTempleUpdate, toggleTempleUpdateStatus,
+  createFestival, updateFestival, deleteFestival,
+  createEvent, updateEvent, deleteEvent,
+  createNews, updateNews, deleteNews
 };

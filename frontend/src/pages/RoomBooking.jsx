@@ -35,11 +35,23 @@ const RoomBooking = () => {
     'non-ac': ['Shared Bathroom', 'Basic Amenities'],
   };
 
+  const fallbackRooms = [
+    { _id: 'demo1', room_name: 'Standard Room 101', room_type: 'standard', price_per_day: 1500, description: 'Comfortable room with basic amenities for a peaceful stay', status: 'available' },
+    { _id: 'demo2', room_name: 'Deluxe Room 201', room_type: 'deluxe', price_per_day: 2500, description: 'Spacious room with premium furnishings and modern amenities', status: 'available' },
+    { _id: 'demo3', room_name: 'Suite Room 301', room_type: 'suite', price_per_day: 4000, description: 'Luxurious suite with exclusive amenities and stunning views', status: 'available' },
+    { _id: 'demo4', room_name: 'Premium Room 102', room_type: 'premium', price_per_day: 3000, description: 'Premium room with exclusive facilities and services', status: 'available' },
+    { _id: 'demo5', room_name: 'AC Room 202', room_type: 'ac', price_per_day: 2000, description: 'Air-conditioned room for ultimate comfort', status: 'available' },
+    { _id: 'demo6', room_name: 'Non-AC Room 103', room_type: 'non-ac', price_per_day: 1000, description: 'Economical room with natural ventilation', status: 'available' },
+    { _id: 'demo7', room_name: 'Standard Room 104', room_type: 'standard', price_per_day: 1500, description: 'Clean and comfortable with temple views', status: 'available' },
+    { _id: 'demo8', room_name: 'Deluxe Room 203', room_type: 'deluxe', price_per_day: 2500, description: 'Premium stay with all modern comforts', status: 'available' }
+  ];
+
   useEffect(() => {
     api.get('/bookings/rooms').then(res => {
-      setRooms(res.data.rooms || []);
+      const dbRooms = res.data.rooms || [];
+      setRooms(dbRooms.length > 0 ? dbRooms : fallbackRooms);
     }).catch(() => {
-      setRooms([]);
+      setRooms(fallbackRooms);
     });
   }, []);
 

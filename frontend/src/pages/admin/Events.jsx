@@ -2,21 +2,21 @@ import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../components/AdminLayout';
 import api from '../../services/api';
 
-const AdminFestivals = () => {
-  const [festivals, setFestivals] = useState([]);
+const AdminEvents = () => {
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
-  const [form, setForm] = useState({ name: '', description: '', event_date: '', event_time: '' });
+  const [form, setForm] = useState({ title: '', description: '', event_date: '', event_time: '' });
   const [imageFile, setImageFile] = useState(null);
 
-  useEffect(() => { loadFestivals(); }, []);
+  useEffect(() => { loadEvents(); }, []);
 
-  const loadFestivals = async () => {
+  const loadEvents = async () => {
     try {
-      const res = await api.get('/content/festivals');
-      const all = [...(res.data.upcoming_festivals || []), ...(res.data.ongoing_festivals || []), ...(res.data.completed_festivals || [])];
-      setFestivals(all);
+      const res = await api.get('/content/events');
+      const all = [...(res.data.upcoming_events || []), ...(res.data.ongoing_events || []), ...(res.data.completed_events || [])];
+      setEvents(all);
       setLoading(false);
     } catch { setLoading(false); }
   };
@@ -25,51 +25,51 @@ const AdminFestivals = () => {
     e.preventDefault();
     try {
       if (editingItem) {
-        await api.put(`/content/festivals/${editingItem._id}`, form);
+        await api.put(`/content/events/${editingItem._id}`, form);
       } else {
         const formData = new FormData();
         Object.keys(form).forEach(key => formData.append(key, form[key]));
         if (imageFile) formData.append('image', imageFile);
-        await api.post('/content/festivals', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+        await api.post('/content/events', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       }
       setShowForm(false); setEditingItem(null);
-      setForm({ name: '', description: '', event_date: '', event_time: '' });
+      setForm({ title: '', description: '', event_date: '', event_time: '' });
       setImageFile(null);
-      loadFestivals();
+      loadEvents();
     } catch (err) { alert(err.response?.data?.message || 'Failed'); }
   };
 
-  const handleEdit = (f) => {
-    setEditingItem(f); setForm({ name: f.name, description: f.description, event_date: f.event_date?.split('T')[0] || '', event_time: f.event_time || '' });
+  const handleEdit = (ev) => {
+    setEditingItem(ev); setForm({ title: ev.title, description: ev.description, event_date: ev.event_date?.split('T')[0] || '', event_time: ev.event_time || '' });
     setShowForm(true);
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this festival?')) return;
-    try { await api.delete(`/content/festivals/${id}`); loadFestivals(); } catch (err) { alert('Failed'); }
+    if (!window.confirm('Delete this event?')) return;
+    try { await api.delete(`/content/events/${id}`); loadEvents(); } catch { alert('Failed'); }
   };
 
-  const handleCancel = () => { setShowForm(false); setEditingItem(null); setForm({ name: '', description: '', event_date: '', event_time: '' }); setImageFile(null); };
+  const handleCancel = () => { setShowForm(false); setEditingItem(null); setForm({ title: '', description: '', event_date: '', event_time: '' }); setImageFile(null); };
 
-  if (loading) return <AdminLayout title="Festivals"><p>Loading...</p></AdminLayout>;
+  if (loading) return <AdminLayout title="Events"><p>Loading...</p></AdminLayout>;
 
   return (
-    <AdminLayout title="Festival Management">
+    <AdminLayout title="Event Management">
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 24 }}>
-        <p style={{ color: '#64748b' }}>{festivals.length} festivals total</p>
+        <p style={{ color: '#64748b' }}>{events.length} events total</p>
         <button onClick={() => { handleCancel(); setShowForm(true); }} style={{ background: '#6366f1', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>
-          <i className="fas fa-plus" style={{ marginRight: 8 }}></i>Add Festival
+          <i className="fas fa-plus" style={{ marginRight: 8 }}></i>Add Event
         </button>
       </div>
 
       {showForm && (
         <div style={{ background: '#fff', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: 24 }}>
-          <h3 style={{ marginBottom: 20 }}>{editingItem ? 'Edit Festival' : 'Add New Festival'}</h3>
+          <h3 style={{ marginBottom: 20 }}>{editingItem ? 'Edit Event' : 'Add New Event'}</h3>
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
               <div>
-                <label style={{ fontWeight: 600, fontSize: 13, color: '#374151', marginBottom: 6, display: 'block' }}>Festival Name</label>
-                <input value={form.name} onChange={e => setForm({...form, name: e.target.value})} required style={{ width: '100%', padding: '10px 14px', border: '2px solid #e2e8f0', borderRadius: 10, fontSize: 14 }} />
+                <label style={{ fontWeight: 600, fontSize: 13, color: '#374151', marginBottom: 6, display: 'block' }}>Event Title</label>
+                <input value={form.title} onChange={e => setForm({...form, title: e.target.value})} required style={{ width: '100%', padding: '10px 14px', border: '2px solid #e2e8f0', borderRadius: 10, fontSize: 14 }} />
               </div>
               <div>
                 <label style={{ fontWeight: 600, fontSize: 13, color: '#374151', marginBottom: 6, display: 'block' }}>Date</label>
@@ -89,7 +89,7 @@ const AdminFestivals = () => {
               </div>
             </div>
             <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
-              <button type="submit" style={{ background: '#10b981', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>{editingItem ? 'Update' : 'Create'} Festival</button>
+              <button type="submit" style={{ background: '#10b981', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>{editingItem ? 'Update' : 'Create'} Event</button>
               <button type="button" onClick={handleCancel} style={{ background: '#f1f5f9', color: '#64748b', border: 'none', padding: '10px 24px', borderRadius: 10, fontWeight: 600, cursor: 'pointer' }}>Cancel</button>
             </div>
           </form>
@@ -100,7 +100,7 @@ const AdminFestivals = () => {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead style={{ background: '#f8fafc' }}>
             <tr>
-              <th style={{ padding: 14, textAlign: 'left', fontSize: 13, fontWeight: 600, color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Name</th>
+              <th style={{ padding: 14, textAlign: 'left', fontSize: 13, fontWeight: 600, color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Title</th>
               <th style={{ padding: 14, textAlign: 'left', fontSize: 13, fontWeight: 600, color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Date</th>
               <th style={{ padding: 14, textAlign: 'left', fontSize: 13, fontWeight: 600, color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Time</th>
               <th style={{ padding: 14, textAlign: 'left', fontSize: 13, fontWeight: 600, color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Status</th>
@@ -108,21 +108,21 @@ const AdminFestivals = () => {
             </tr>
           </thead>
           <tbody>
-            {festivals.length > 0 ? festivals.map(f => (
-              <tr key={f._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                <td style={{ padding: 14, fontWeight: 600, fontSize: 14 }}>{f.name}</td>
-                <td style={{ padding: 14, fontSize: 13, color: '#64748b' }}>{new Date(f.event_date).toLocaleDateString()}</td>
-                <td style={{ padding: 14, fontSize: 13, color: '#64748b' }}>{f.event_time || '-'}</td>
+            {events.length > 0 ? events.map(ev => (
+              <tr key={ev._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                <td style={{ padding: 14, fontWeight: 600, fontSize: 14 }}>{ev.title}</td>
+                <td style={{ padding: 14, fontSize: 13, color: '#64748b' }}>{new Date(ev.event_date).toLocaleDateString()}</td>
+                <td style={{ padding: 14, fontSize: 13, color: '#64748b' }}>{ev.event_time || '-'}</td>
                 <td style={{ padding: 14 }}>
-                  <span style={{ padding: '4px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, background: f.status === 'active' ? '#d1fae5' : '#fee2e2', color: f.status === 'active' ? '#065f46' : '#991b1b' }}>{f.status}</span>
+                  <span style={{ padding: '4px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, background: ev.status === 'upcoming' ? '#dbeafe' : ev.status === 'completed' ? '#d1fae5' : '#fef3c7', color: ev.status === 'upcoming' ? '#1e40af' : ev.status === 'completed' ? '#065f46' : '#92400e' }}>{ev.status}</span>
                 </td>
                 <td style={{ padding: 14, textAlign: 'right' }}>
-                  <button onClick={() => handleEdit(f)} style={{ background: '#6366f1', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: 8, fontSize: 12, cursor: 'pointer', marginRight: 8 }}><i className="fas fa-edit"></i></button>
-                  <button onClick={() => handleDelete(f._id)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: 8, fontSize: 12, cursor: 'pointer' }}><i className="fas fa-trash"></i></button>
+                  <button onClick={() => handleEdit(ev)} style={{ background: '#6366f1', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: 8, fontSize: 12, cursor: 'pointer', marginRight: 8 }}><i className="fas fa-edit"></i></button>
+                  <button onClick={() => handleDelete(ev._id)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: 8, fontSize: 12, cursor: 'pointer' }}><i className="fas fa-trash"></i></button>
                 </td>
               </tr>
             )) : (
-              <tr><td colSpan="5" style={{ padding: 40, textAlign: 'center', color: '#94a3b8' }}>No festivals found</td></tr>
+              <tr><td colSpan="5" style={{ padding: 40, textAlign: 'center', color: '#94a3b8' }}>No events found</td></tr>
             )}
           </tbody>
         </table>
@@ -131,4 +131,4 @@ const AdminFestivals = () => {
   );
 };
 
-export default AdminFestivals;
+export default AdminEvents;

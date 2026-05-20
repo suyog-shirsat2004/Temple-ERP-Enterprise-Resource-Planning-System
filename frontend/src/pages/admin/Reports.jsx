@@ -1,69 +1,99 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import AdminLayout from '../../components/AdminLayout';
 import api from '../../services/api';
 
 const AdminReports = () => {
   const [stats, setStats] = useState(null);
-  useEffect(() => { api.get('/admin/dashboard').then(res => setStats(res.data.stats)); }, []);
+  const [loading, setLoading] = useState(true);
 
-  if (!stats) return <div className="text-center" style={{ padding: 100 }}>Loading...</div>;
+  useEffect(() => {
+    api.get('/admin/dashboard').then(res => {
+      setStats(res.data.stats);
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, []);
+
+  if (loading) return <AdminLayout title="Reports & Analytics"><div style={{ textAlign: 'center', padding: 100, color: '#64748b' }}>Loading reports...</div></AdminLayout>;
+  if (!stats) return <AdminLayout title="Reports & Analytics"><div style={{ textAlign: 'center', padding: 100, color: '#94a3b8' }}>No data available</div></AdminLayout>;
+
+  const totalRevenue = (stats.total_donations_amount || 0) + (stats.restaurant_revenue || 0);
+  const totalPending = (stats.pending_passes || 0) + (stats.pending_bookings || 0) + (stats.pending_donations || 0) + (stats.pending_restaurant_orders || 0);
+
+  const revenueBreakdown = [
+    { label: 'Donation Revenue', value: stats.total_donations_amount || 0, icon: 'fas fa-donate', color: '#f59e0b', bg: '#fef3c7' },
+    { label: 'Restaurant Revenue', value: stats.restaurant_revenue || 0, icon: 'fas fa-utensils', color: '#ec4899', bg: '#fce7f3' },
+    { label: 'Room Booking Revenue', value: stats.booking_revenue || 0, icon: 'fas fa-hotel', color: '#10b981', bg: '#d1fae5' },
+    { label: 'Pass Revenue', value: stats.pass_revenue || 0, icon: 'fas fa-ticket-alt', color: '#6366f1', bg: '#e0e7ff' }
+  ];
+
+  const activityCards = [
+    { label: 'Total Devotees', value: stats.total_visitors || 0, icon: 'fas fa-users', color: '#6366f1' },
+    { label: 'Total Passes', value: stats.total_passes || 0, icon: 'fas fa-ticket-alt', color: '#ec4899' },
+    { label: 'Total Bookings', value: stats.total_bookings || 0, icon: 'fas fa-hotel', color: '#10b981' },
+    { label: 'Total Donations', value: stats.total_donations || 0, icon: 'fas fa-donate', color: '#f59e0b' },
+    { label: 'Restaurant Orders', value: stats.total_restaurant_orders || 0, icon: 'fas fa-utensils', color: '#8b5cf6' }
+  ];
+
+  const pendingItems = [
+    { label: 'Pending Passes', value: stats.pending_passes || 0, bg: '#fef3c7', color: '#92400e', icon: 'fas fa-ticket-alt', link: '/admin/passes' },
+    { label: 'Pending Bookings', value: stats.pending_bookings || 0, bg: '#e0e7ff', color: '#3730a3', icon: 'fas fa-hotel', link: '/admin/bookings' },
+    { label: 'Pending Donations', value: stats.pending_donations || 0, bg: '#d1fae5', color: '#065f46', icon: 'fas fa-donate', link: '/admin/donations' },
+    { label: 'Pending Orders', value: stats.pending_restaurant_orders || 0, bg: '#fce7f3', color: '#9d174d', icon: 'fas fa-utensils', link: '/admin/restaurant' }
+  ];
 
   return (
-    <div className="container" style={{ padding: '24px 0' }}>
-      <h1 style={{ marginBottom: 24 }}>Reports & Analytics</h1>
-
-      <div className="grid grid-2" style={{ marginBottom: 32 }}>
-        <div className="card">
-          <h3 style={{ marginBottom: 16 }}>Revenue Summary</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: 12, background: '#f8fafc', borderRadius: 8 }}>
-              <span>Donation Revenue</span>
-              <span style={{ fontWeight: 'bold', color: '#10b981' }}>₹{stats.total_donations_amount}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: 12, background: '#f8fafc', borderRadius: 8 }}>
-              <span>Restaurant Revenue</span>
-              <span style={{ fontWeight: 'bold', color: '#ec4899' }}>₹{stats.restaurant_revenue}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: 12, background: '#f8fafc', borderRadius: 8, borderTop: '2px solid #e2e8f0' }}>
-              <span style={{ fontWeight: 'bold' }}>Total Revenue</span>
-              <span style={{ fontWeight: 'bold', color: '#6366f1', fontSize: 18 }}>₹{stats.total_donations_amount + stats.restaurant_revenue}</span>
-            </div>
-          </div>
+    <AdminLayout title="Reports & Analytics">
+      {/* Revenue Overview */}
+      <div style={{ background: '#fff', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: 24 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#1e293b', margin: 0 }}>Revenue Overview</h3>
+          <div style={{ fontSize: 24, fontWeight: 800, color: '#6366f1' }}>Rs.{totalRevenue.toLocaleString()}</div>
         </div>
-
-        <div className="card">
-          <h3 style={{ marginBottom: 16 }}>Activity Summary</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Total Users</span><span style={{ fontWeight: 'bold' }}>{stats.total_visitors}</span></div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Total Passes</span><span style={{ fontWeight: 'bold' }}>{stats.total_passes}</span></div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Total Bookings</span><span style={{ fontWeight: 'bold' }}>{stats.total_bookings}</span></div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Total Donations</span><span style={{ fontWeight: 'bold' }}>{stats.total_donations}</span></div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Restaurant Orders</span><span style={{ fontWeight: 'bold' }}>{stats.total_restaurant_orders}</span></div>
-          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+          {revenueBreakdown.map((item, i) => (
+            <div key={i} style={{ padding: 20, background: item.bg, borderRadius: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color }}><i className={item.icon}></i></div>
+                <div style={{ fontSize: 12, color: item.color, fontWeight: 500 }}>{item.label}</div>
+              </div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: item.color }}>Rs.{item.value.toLocaleString()}</div>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="card">
-        <h3 style={{ marginBottom: 16 }}>Pending Items</h3>
-        <div className="grid grid-4" style={{ gap: 16 }}>
-          <div style={{ padding: 16, background: '#fef3c7', borderRadius: 8, textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 'bold', color: '#92400e' }}>{stats.pending_passes}</div>
-            <div style={{ fontSize: 12, color: '#92400e' }}>Pending Passes</div>
-          </div>
-          <div style={{ padding: 16, background: '#e0e7ff', borderRadius: 8, textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 'bold', color: '#3730a3' }}>{stats.pending_bookings}</div>
-            <div style={{ fontSize: 12, color: '#3730a3' }}>Pending Bookings</div>
-          </div>
-          <div style={{ padding: 16, background: '#d1fae5', borderRadius: 8, textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 'bold', color: '#065f46' }}>{stats.pending_donations}</div>
-            <div style={{ fontSize: 12, color: '#065f46' }}>Pending Donations</div>
-          </div>
-          <div style={{ padding: 16, background: '#fce7f3', borderRadius: 8, textAlign: 'center' }}>
-            <div style={{ fontSize: 24, fontWeight: 'bold', color: '#9d174d' }}>{stats.pending_restaurant_orders}</div>
-            <div style={{ fontSize: 12, color: '#9d174d' }}>Pending Orders</div>
-          </div>
+      {/* Activity Summary */}
+      <div style={{ background: '#fff', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', marginBottom: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, color: '#1e293b', margin: '0 0 20px' }}>Activity Summary</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16 }}>
+          {activityCards.map((item, i) => (
+            <div key={i} style={{ padding: 20, background: '#f8fafc', borderRadius: 12, textAlign: 'center' }}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: item.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color, fontSize: 18, margin: '0 auto 12px' }}><i className={item.icon}></i></div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: '#1e293b' }}>{item.value}</div>
+              <div style={{ fontSize: 12, color: '#64748b', fontWeight: 500 }}>{item.label}</div>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+
+      {/* Pending Items */}
+      <div style={{ background: '#fff', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#1e293b', margin: 0 }}>Pending Items</h3>
+          <span style={{ fontSize: 14, fontWeight: 700, color: '#ef4444' }}>{totalPending} total pending</span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+          {pendingItems.map((item, i) => (
+            <Link key={i} to={item.link} style={{ textDecoration: 'none', padding: 20, background: item.bg, borderRadius: 12, textAlign: 'center', transition: 'transform 0.2s ease' }}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color, fontSize: 18, margin: '0 auto 12px' }}><i className={item.icon}></i></div>
+              <div style={{ fontSize: 28, fontWeight: 800, color: item.color }}>{item.value}</div>
+              <div style={{ fontSize: 12, color: item.color, fontWeight: 600 }}>{item.label}</div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </AdminLayout>
   );
 };
 

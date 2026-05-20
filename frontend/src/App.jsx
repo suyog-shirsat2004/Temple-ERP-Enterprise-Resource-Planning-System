@@ -21,6 +21,7 @@ import OrderHistory from './pages/OrderHistory';
 import Events from './pages/Events';
 import Festivals from './pages/Festivals';
 import News from './pages/News';
+
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminUsers from './pages/admin/Users';
 import AdminPasses from './pages/admin/Passes';
@@ -30,6 +31,9 @@ import AdminRestaurant from './pages/admin/Restaurant';
 import AdminDevotees from './pages/admin/Devotees';
 import AdminReports from './pages/admin/Reports';
 import AdminFestivals from './pages/admin/Festivals';
+import AdminEvents from './pages/admin/Events';
+import AdminNews from './pages/admin/News';
+import AdminRooms from './pages/admin/Rooms';
 
 const PrivateRoute = ({ children }) => {
   const { token, loading } = useAuth();
@@ -40,14 +44,14 @@ const PrivateRoute = ({ children }) => {
 const AdminRoute = ({ children }) => {
   const { user, token, loading } = useAuth();
   if (loading) return <div className="text-center" style={{ padding: '100px' }}>Loading...</div>;
-  return token && user?.role === 'admin' ? children : <Navigate to="/admin/login" />;
+  return token && (user?.role === 'admin' || user?.id === 'admin') ? children : <Navigate to="/admin/login" />;
 };
 
 const HomeRedirect = () => {
   const { user, token, loading } = useAuth();
   if (loading) return <div className="text-center" style={{ padding: '100px' }}>Loading...</div>;
   if (!token) return <Home />;
-  if (user?.role === 'admin') return <Navigate to="/admin" />;
+  if (user?.role === 'admin' || user?.id === 'admin') return <Navigate to="/admin" />;
   return <Navigate to="/dashboard" />;
 };
 
@@ -84,6 +88,9 @@ function App() {
         <Route path="/admin/devotees" element={<AdminRoute><AdminDevotees /></AdminRoute>} />
         <Route path="/admin/reports" element={<AdminRoute><AdminReports /></AdminRoute>} />
         <Route path="/admin/festivals" element={<AdminRoute><AdminFestivals /></AdminRoute>} />
+        <Route path="/admin/events" element={<AdminRoute><AdminEvents /></AdminRoute>} />
+        <Route path="/admin/news" element={<AdminRoute><AdminNews /></AdminRoute>} />
+        <Route path="/admin/rooms" element={<AdminRoute><AdminRooms /></AdminRoute>} />
       </Routes>
     </Router>
   );

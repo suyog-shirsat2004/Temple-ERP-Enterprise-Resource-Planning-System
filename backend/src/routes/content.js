@@ -14,4 +14,16 @@ router.put('/temple-updates/:id', adminAuth, upload.single('image'), contentCont
 router.delete('/temple-updates/:id', adminAuth, contentController.deleteTempleUpdate);
 router.put('/temple-updates/:id/toggle-status', adminAuth, contentController.toggleTempleUpdateStatus);
 
+router.post('/festivals', adminAuth, upload.single('image'), contentController.createFestival);
+router.put('/festivals/:id', adminAuth, contentController.updateFestival);
+router.delete('/festivals/:id', adminAuth, contentController.deleteFestival);
+
+router.post('/events', adminAuth, upload.single('image'), contentController.createEvent);
+router.put('/events/:id', adminAuth, contentController.updateEvent);
+router.delete('/events/:id', adminAuth, contentController.deleteEvent);
+
+router.post('/news', adminAuth, upload.single('image'), contentController.createNews);
+router.put('/news/:id', adminAuth, contentController.updateNews);
+router.delete('/news/:id', adminAuth, contentController.deleteNews);
+
 module.exports = router;
