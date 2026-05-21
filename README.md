@@ -9,6 +9,10 @@
 ![Node.js](https://img.shields.io/badge/Runtime-Node.js-339933?logo=node.js)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
+> 🌐 **Live Demo:** [Temple ERP - Live](https://suyog-shirsat2004.github.io/Temple-ERP-Enterprise-Resource-Planning-System/)
+> 
+> *Note: The live demo runs the frontend only. Connect it to a running backend instance for full functionality.*
+
 ---
 
 ## 📸 Screenshots
