@@ -42,7 +42,7 @@ const Navbar = ({ isAdmin = false }) => {
       }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{ width: 40, height: 40, animation: 'omPulse 2s ease-in-out infinite' }} />
+            <img src={asset('/images/temple/icon-symbol.webp')} alt="Temple" style={{ width: 40, height: 40, animation: 'omPulse 2s ease-in-out infinite' }} />
             <span style={{ fontSize: 22, fontWeight: 700, color: '#ffd700', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>Temple ERP</span>
           </Link>
           <div style={{ display: 'flex', gap: 12 }}>
@@ -86,7 +86,7 @@ const Navbar = ({ isAdmin = false }) => {
       }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
           <Link to={isAdmin ? "/admin" : "/dashboard"} style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{ width: 40, height: 40 }} />
+            <img src={asset('/images/temple/icon-symbol.webp')} alt="Temple" style={{ width: 40, height: 40 }} />
             <span style={{ fontSize: 22, fontWeight: 700, color: '#ffd700', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>Temple ERP</span>
           </Link>
 

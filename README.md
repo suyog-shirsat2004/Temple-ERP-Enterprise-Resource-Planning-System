@@ -11,7 +11,7 @@
 
 > 🌐 **Live Demo:** [Temple ERP - Live](https://suyog-shirsat2004.github.io/Temple-ERP-Enterprise-Resource-Planning-System/)
 > 
-> 🔗 **Live Backend API:** [https://debian-assembled-wishlist-fish.trycloudflare.com/api](https://debian-assembled-wishlist-fish.trycloudflare.com/api) (Cloudflare tunnel — backend must be running locally)
+> 🔗 **Live Backend API:** [https://resulting-ensure-people-switches.trycloudflare.com/api](https://resulting-ensure-people-switches.trycloudflare.com/api) (Cloudflare tunnel — backend must be running locally)
 
 ---
 
@@ -900,7 +900,7 @@ VITE_API_URL=http://localhost:5000/api
 
 **For live deployment**, set the frontend `.env` to point to a public tunnel:
 ```env
-VITE_API_URL=https://debian-assembled-wishlist-fish.trycloudflare.com/api
+VITE_API_URL=https://resulting-ensure-people-switches.trycloudflare.com/api
 ```
 
 ### Running the Application
@@ -925,7 +925,7 @@ npx cloudflared tunnel --url http://localhost:5000
 | Frontend (local) | http://localhost:5173/Temple-ERP-Enterprise-Resource-Planning-System/ |
 | Frontend (live) | https://suyog-shirsat2004.github.io/Temple-ERP-Enterprise-Resource-Planning-System/ |
 | Backend API (local) | http://localhost:5000 |
-| Backend API (live tunnel) | [https://debian-assembled-wishlist-fish.trycloudflare.com/api](https://debian-assembled-wishlist-fish.trycloudflare.com/api) |
+| Backend API (live tunnel) | [https://resulting-ensure-people-switches.trycloudflare.com/api](https://resulting-ensure-people-switches.trycloudflare.com/api) |
 | Health Check | http://localhost:5000/api/health |
 | Uploads | http://localhost:5000/uploads/ |
 
