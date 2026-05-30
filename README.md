@@ -11,7 +11,7 @@
 
 > 🌐 **Live Demo:** [Temple ERP - Live](https://suyog-shirsat2004.github.io/Temple-ERP-Enterprise-Resource-Planning-System/)
 > 
-> 🔗 **Live Backend API:** `https://debian-assembled-wishlist-fish.trycloudflare.com/api` (Cloudflare tunnel — backend must be running locally)
+> 🔗 **Live Backend API:** [https://debian-assembled-wishlist-fish.trycloudflare.com/api](https://debian-assembled-wishlist-fish.trycloudflare.com/api) (Cloudflare tunnel — backend must be running locally)
 
 ---
 
@@ -915,7 +915,7 @@ cd frontend
 npm run dev
 
 # Terminal 3 (optional) - Public tunnel for live testing
-npx localtunnel --port 5000 --subdomain temple-erp-api
+npx cloudflared tunnel --url http://localhost:5000
 ```
 
 ### Access Points
@@ -925,7 +925,7 @@ npx localtunnel --port 5000 --subdomain temple-erp-api
 | Frontend (local) | http://localhost:5173/Temple-ERP-Enterprise-Resource-Planning-System/ |
 | Frontend (live) | https://suyog-shirsat2004.github.io/Temple-ERP-Enterprise-Resource-Planning-System/ |
 | Backend API (local) | http://localhost:5000 |
-| Backend API (live tunnel) | https://debian-assembled-wishlist-fish.trycloudflare.com/api |
+| Backend API (live tunnel) | [https://debian-assembled-wishlist-fish.trycloudflare.com/api](https://debian-assembled-wishlist-fish.trycloudflare.com/api) |
 | Health Check | http://localhost:5000/api/health |
 | Uploads | http://localhost:5000/uploads/ |
 
