@@ -11,7 +11,7 @@
 
 > 🌐 **Live Demo:** [Temple ERP - Live](https://suyog-shirsat2004.github.io/Temple-ERP-Enterprise-Resource-Planning-System/)
 > 
-> 🔗 **Live Backend API:** `https://temple-erp-api.loca.lt/api` (tunnel — backend must be running locally)
+> 🔗 **Live Backend API:** `https://launched-propecia-integer-legislature.trycloudflare.com/api` (Cloudflare tunnel — backend must be running locally)
 
 ---
 
@@ -900,7 +900,7 @@ VITE_API_URL=http://localhost:5000/api
 
 **For live deployment**, set the frontend `.env` to point to a public tunnel:
 ```env
-VITE_API_URL=https://temple-erp-api.loca.lt/api
+VITE_API_URL=https://launched-propecia-integer-legislature.trycloudflare.com/api
 ```
 
 ### Running the Application
@@ -925,7 +925,7 @@ npx localtunnel --port 5000 --subdomain temple-erp-api
 | Frontend (local) | http://localhost:5173/Temple-ERP-Enterprise-Resource-Planning-System/ |
 | Frontend (live) | https://suyog-shirsat2004.github.io/Temple-ERP-Enterprise-Resource-Planning-System/ |
 | Backend API (local) | http://localhost:5000 |
-| Backend API (live tunnel) | https://temple-erp-api.loca.lt/api |
+| Backend API (live tunnel) | https://launched-propecia-integer-legislature.trycloudflare.com/api |
 | Health Check | http://localhost:5000/api/health |
 | Uploads | http://localhost:5000/uploads/ |
 
