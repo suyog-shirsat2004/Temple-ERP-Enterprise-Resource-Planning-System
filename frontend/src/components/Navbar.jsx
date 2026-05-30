@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { asset } from '../utils/paths';
 
 const Navbar = ({ isAdmin = false }) => {
   const { user, logout } = useAuth();
@@ -41,7 +42,7 @@ const Navbar = ({ isAdmin = false }) => {
       }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <img src="/images/temple/icon symbol.webp" alt="Temple" style={{ width: 40, height: 40, animation: 'omPulse 2s ease-in-out infinite' }} />
+            <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{ width: 40, height: 40, animation: 'omPulse 2s ease-in-out infinite' }} />
             <span style={{ fontSize: 22, fontWeight: 700, color: '#ffd700', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>Temple ERP</span>
           </Link>
           <div style={{ display: 'flex', gap: 12 }}>
@@ -85,7 +86,7 @@ const Navbar = ({ isAdmin = false }) => {
       }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
           <Link to={isAdmin ? "/admin" : "/dashboard"} style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <img src="/images/temple/icon symbol.webp" alt="Temple" style={{ width: 40, height: 40 }} />
+            <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{ width: 40, height: 40 }} />
             <span style={{ fontSize: 22, fontWeight: 700, color: '#ffd700', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>Temple ERP</span>
           </Link>
 
@@ -150,8 +151,8 @@ const Navbar = ({ isAdmin = false }) => {
                 background: 'rgba(255,255,255,0.2)', cursor: 'pointer', overflow: 'hidden',
                 display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
-                <img src={user?.profile_pic ? `/uploads/profile/${user.profile_pic}` : '/images/default-avatar.svg'} alt="Profile"
-                  onError={(e) => { e.target.src = '/images/default-avatar.svg'; }}
+                <img src={user?.profile_pic ? `/uploads/profile/${user.profile_pic}` : asset('/images/default-avatar.svg')} alt="Profile"
+                  onError={(e) => { e.target.src = asset('/images/default-avatar.svg'); }}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </button>
               {profileOpen && (
@@ -167,8 +168,8 @@ const Navbar = ({ isAdmin = false }) => {
                       width: 70, height: 70, borderRadius: '50%', border: '3px solid #ffd700',
                       margin: '0 auto 12px', overflow: 'hidden'
                     }}>
-                      <img src={user?.profile_pic ? `/uploads/profile/${user.profile_pic}` : '/images/default-avatar.svg'} alt="Profile"
-                        onError={(e) => { e.target.src = '/images/default-avatar.svg'; }}
+                      <img src={user?.profile_pic ? `/uploads/profile/${user.profile_pic}` : asset('/images/default-avatar.svg')} alt="Profile"
+                        onError={(e) => { e.target.src = asset('/images/default-avatar.svg'); }}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ fontWeight: 600 }}>{user.name || user.email}</div>

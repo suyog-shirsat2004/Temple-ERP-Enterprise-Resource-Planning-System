@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import { asset } from '../utils/paths';
 
 const Donations = () => {
   const [donations, setDonations] = useState([]);
@@ -80,7 +81,7 @@ const Donations = () => {
         }}>
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-            background: 'url(/images/temple/icon-symbol.webp) no-repeat center center',
+            background: `url(${asset('/images/temple/icon-symbol.webp')}) no-repeat center center`,
             backgroundSize: 250, opacity: 0.1,
             animation: 'float 6s ease-in-out infinite'
           }}></div>
@@ -353,7 +354,7 @@ const Donations = () => {
                 animation: 'fadeInUp 0.5s ease'
               }}>
                 <div style={{ display: 'inline-block', padding: 20, background: '#f8fafc', borderRadius: 10 }}>
-                  <img src="/images/pay/QR.jpeg" alt="Payment QR" style={{ width: 180, height: 180, objectFit: 'cover', borderRadius: 8 }} />
+                  <img src={asset('/images/pay/QR.jpeg')} alt="Payment QR" style={{ width: 180, height: 180, objectFit: 'cover', borderRadius: 8 }} />
                 </div>
                 <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#22c55e', margin: '10px 0' }}>Amount: ₹{formData.amount}</div>
                 <p style={{ color: '#64748b', fontSize: 14, margin: 0 }}>Scan with any UPI App</p>
@@ -457,7 +458,7 @@ const Donations = () => {
         color: 'white', padding: 50, textAlign: 'center', marginTop: 80, position: 'relative'
       }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 5, background: 'linear-gradient(135deg, #ec4899, #f43f5e)' }}></div>
-        <img src="/images/temple/icon-symbol.webp" alt="Temple" style={{
+        <img src={asset('/images/temple/icon-symbol.webp')} alt="Temple" style={{
           width: 60, height: 60, marginBottom: 20, borderRadius: '50%',
           transition: 'transform 0.3s ease'
         }}

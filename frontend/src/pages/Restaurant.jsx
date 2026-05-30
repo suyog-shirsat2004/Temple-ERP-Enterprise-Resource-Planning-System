@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import { asset } from '../utils/paths';
 
 const Restaurant = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -144,7 +145,7 @@ const Restaurant = () => {
       }}>
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'url(/images/temple/icon symbol.webp) no-repeat center center',
+          background: `url(${asset('/images/temple/icon symbol.webp')}) no-repeat center center`,
           backgroundSize: 250, opacity: 0.1, animation: 'float 6s ease-in-out infinite'
         }}></div>
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -238,7 +239,7 @@ const Restaurant = () => {
                 }}
                 >
                   <div style={{ height: 200, position: 'relative', overflow: 'hidden' }}>
-                    <img src={`/images/restro/${img}`} alt={item.item_name} style={{
+                    <img src={asset(`/images/restro/${img}`)} alt={item.item_name} style={{
                       width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease'
                     }}
                     onError={(e) => {
@@ -463,9 +464,9 @@ const Restaurant = () => {
                       <div style={{ textAlign: 'center', marginTop: 20, padding: 20, background: 'white', borderRadius: 15, border: '2px dashed #22c55e', animation: 'fadeInUp 0.5s ease' }}>
                         <div className="scan-animation" style={{ position: 'relative' }}>
                           <div style={{ width: 180, height: 180, margin: '0 auto 15px', borderRadius: 10, overflow: 'hidden', boxShadow: '0 5px 20px rgba(0,0,0,0.1)' }}>
-                            <img src="/images/pay/qr.png" alt="Payment QR" style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            <img src={asset('/images/pay/qr.png')} alt="Payment QR" style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             onError={(e) => {
-                              e.target.src = '/images/pay/QR.jpeg';
+                              e.target.src = asset('/images/pay/QR.jpeg');
                               e.target.onerror = () => { e.target.style.display = 'none'; };
                             }} />
                           </div>
@@ -526,7 +527,7 @@ const Restaurant = () => {
         color: 'white', padding: 50, textAlign: 'center', position: 'relative', marginTop: 50
       }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 5, background: 'linear-gradient(135deg, #ec4899, #f43f5e)' }}></div>
-        <img src="/images/temple/icon-symbol.webp" alt="Temple" style={{
+        <img src={asset('/images/temple/icon-symbol.webp')} alt="Temple" style={{
           width: 60, height: 60, marginBottom: 20, borderRadius: '50%',
           transition: 'transform 0.3s ease'
         }}

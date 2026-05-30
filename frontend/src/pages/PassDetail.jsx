@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
+import { asset } from '../utils/paths';
 
 const PassDetail = () => {
   const { id } = useParams();
@@ -54,9 +55,9 @@ const PassDetail = () => {
 
             {pass.user_id && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 15, padding: '15px', background: '#f0f2ff', borderRadius: 12, marginBottom: 15 }}>
-                <img src={pass.user_id.profile_pic ? `/uploads/profile/${pass.user_id.profile_pic}` : '/images/default-avatar.svg'}
+                <img src={pass.user_id.profile_pic ? `/uploads/profile/${pass.user_id.profile_pic}` : asset('/images/default-avatar.svg')}
                   alt="" style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover', border: '2px solid #667eea' }}
-                  onError={(e) => { e.target.src = '/images/default-avatar.svg'; }} />
+                  onError={(e) => { e.target.src = asset('/images/default-avatar.svg'); }} />
                 <div>
                   <div style={{ fontWeight: 600, color: '#1e293b', fontSize: 15 }}>{pass.user_id.name || 'User'}</div>
                   <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{pass.user_id.email || ''}</div>

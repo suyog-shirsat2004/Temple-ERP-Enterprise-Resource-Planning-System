@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import { asset } from '../utils/paths';
 
 const Festivals = () => {
   const [festivals, setFestivals] = useState([]);
@@ -48,7 +49,7 @@ const Festivals = () => {
       }}>
         <div style={{
           position: 'absolute', top:0, left:0, right:0, bottom:0,
-          background: 'url(/images/temple/icon-symbol.webp) no-repeat center center',
+          background: `url(${asset('/images/temple/icon-symbol.webp')}) no-repeat center center`,
           backgroundSize: 250, opacity: 0.1, animation: 'float 6s ease-in-out infinite'
         }}></div>
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -332,7 +333,7 @@ const Festivals = () => {
         color: 'white', padding: 50, textAlign: 'center', position: 'relative'
       }}>
         <div style={{ position: 'absolute', top:0, left:0, right:0, height:5, background: 'linear-gradient(135deg, #8b5cf6, #a78bfa)' }}></div>
-        <img src="/images/temple/icon-symbol.webp" alt="Temple" style={{
+        <img src={asset('/images/temple/icon-symbol.webp')} alt="Temple" style={{
           width: 60, height: 60, marginBottom: 20, borderRadius: '50%', transition: 'transform 0.3s ease'
         }}
         onMouseEnter={(e) => e.target.style.transform = 'rotate(360deg) scale(1.1)'}

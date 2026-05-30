@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
 import animationData from '../animations/material-wave-loading.json';
 import api from '../services/api';
+import { asset } from '../utils/paths';
 
 const PAYMENT_METHODS = [
   { id: 'UPI', label: 'UPI', icon: 'fa-mobile-alt', color: '#6366f1' },
@@ -91,7 +92,7 @@ const NewPass = () => {
           <a href="/" style={{
             display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none'
           }}>
-            <img src="/images/temple/icon-symbol.webp" alt="Temple" style={{
+            <img src={asset('/images/temple/icon-symbol.webp')} alt="Temple" style={{
               width: 45, height: 45, borderRadius: 12,
               transition: 'transform 0.3s ease',
               animation: 'gentleFloat 3s ease-in-out infinite'

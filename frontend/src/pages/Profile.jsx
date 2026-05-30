@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { asset } from '../utils/paths';
 
 const Profile = () => {
   const { user, updateUser } = useAuth();
@@ -71,7 +72,7 @@ const Profile = () => {
     }
   };
 
-  const profilePicSrc = previewUrl || (user?.profile_pic ? `/uploads/profile/${user.profile_pic}` : '/images/default-avatar.svg');
+  const profilePicSrc = previewUrl || (user?.profile_pic ? `/uploads/profile/${user.profile_pic}` : asset('/images/default-avatar.svg'));
 
   return (
     <div style={{
@@ -108,7 +109,7 @@ const Profile = () => {
             src={profilePicSrc}
             alt="Profile"
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            onError={(e) => { e.target.src = '/images/default-avatar.svg'; }}
+            onError={(e) => { e.target.src = asset('/images/default-avatar.svg'); }}
           />
         </div>
         <h2 style={{ marginBottom: 5 }}>{user?.name || 'User'}</h2>
@@ -469,7 +470,7 @@ const Profile = () => {
                     src={profilePicSrc}
                     alt="Profile"
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    onError={(e) => { e.target.src = '/images/default-avatar.svg'; }}
+                    onError={(e) => { e.target.src = asset('/images/default-avatar.svg'); }}
                   />
                 </div>
 

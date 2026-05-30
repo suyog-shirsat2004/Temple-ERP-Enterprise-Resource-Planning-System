@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import { asset } from '../utils/paths';
 
 const Notifications = () => {
   const [messages, setMessages] = useState([]);
@@ -88,7 +89,7 @@ const Notifications = () => {
       }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <a href="/home" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <img src="/images/temple/icon symbol.webp" alt="Temple" style={{ width: 40, height: 40, borderRadius: 10, marginRight: 8 }} />
+            <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{ width: 40, height: 40, borderRadius: 10, marginRight: 8 }} />
             <span style={{ background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: 800, fontSize: '1.4rem' }}>Temple ERP</span>
           </a>
           <div style={{ display: 'flex', gap: 5 }}>
@@ -128,7 +129,7 @@ const Notifications = () => {
       <div style={{ padding: '40px 20px', maxWidth: 1200, margin: '0 auto' }}>
         {/* Page Header */}
         <div style={{ textAlign: 'center', color: 'white', marginBottom: 40, animation: 'slideDown 0.6s ease-out' }}>
-          <img src="/images/temple/icon symbol.webp" alt="Temple" style={{ width: 100, height: 100, margin: '0 auto 15px', transition: 'transform 0.3s ease', cursor: 'pointer' }}
+          <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{ width: 100, height: 100, margin: '0 auto 15px', transition: 'transform 0.3s ease', cursor: 'pointer' }}
             onMouseEnter={(e) => e.target.style.transform = 'scale(1.1) rotate(5deg)'}
             onMouseLeave={(e) => e.target.style.transform = 'scale(1) rotate(0deg)'}
           />
@@ -615,7 +616,7 @@ const Notifications = () => {
       <footer style={{
         background: 'rgba(0,0,0,0.2)', color: 'white', padding: 25, textAlign: 'center', marginTop: 50
       }}>
-        <img src="/images/temple/icon symbol.webp" alt="Temple" style={{ width: 50, height: 50, transition: 'transform 0.3s ease' }}
+        <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{ width: 50, height: 50, transition: 'transform 0.3s ease' }}
           onMouseEnter={(e) => e.target.style.transform = 'rotate(360deg) scale(1.1)'}
           onMouseLeave={(e) => e.target.style.transform = 'rotate(0deg) scale(1)'}
         />

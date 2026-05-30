@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { asset } from '../utils/paths';
 
 const Home = () => {
   const { user, logout } = useAuth();
@@ -41,7 +42,7 @@ const Home = () => {
       }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <img src="/images/temple/icon symbol.webp" alt="Temple" style={{ width: 40, height: 40 }} />
+            <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{ width: 40, height: 40 }} />
             <span style={{ fontSize: 22, fontWeight: 700, color: '#ffd700', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>Temple ERP</span>
           </Link>
 
@@ -88,15 +89,15 @@ const Home = () => {
                   display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
                   <img src={user?.profile_pic ? `/uploads/profile/${user.profile_pic}` : '/images/default-avatar.svg'} alt="Profile"
-                    onError={(e) => { e.target.src = '/images/default-avatar.svg'; }}
+                    onError={(e) => { e.target.src = asset('/images/default-avatar.svg'); }}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </button>
                 {profileOpen && (
                   <div onClick={(e) => e.stopPropagation()} style={{ ...dropdownMenu, minWidth: 260 }}>
                     <div style={{ padding: 20, textAlign: 'center', background: 'linear-gradient(135deg, #ff6b35, #f7931e)', color: '#fff' }}>
                       <div style={{ width: 70, height: 70, borderRadius: '50%', border: '3px solid #ffd700', margin: '0 auto 12px', overflow: 'hidden' }}>
-                        <img src={user?.profile_pic ? `/uploads/profile/${user.profile_pic}` : '/images/default-avatar.svg'} alt="Profile"
-                          onError={(e) => { e.target.src = '/images/default-avatar.svg'; }}
+                        <img src={user?.profile_pic ? `/uploads/profile/${user.profile_pic}` : asset('/images/default-avatar.svg')} alt="Profile"
+                          onError={(e) => { e.target.src = asset('/images/default-avatar.svg'); }}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       </div>
                       <div style={{ fontWeight: 600 }}>{user.name || user.email}</div>
@@ -133,7 +134,7 @@ const Home = () => {
 
       {/* Hero Section */}
       <div style={{
-        backgroundImage: 'url(/assets/images/temple.jpg)',
+        backgroundImage: `url(${asset('/assets/images/temple.jpg')})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         minHeight: '70vh',
@@ -686,12 +687,12 @@ const aboutCards = [
 ];
 
 const galleryImages = [
-  { src: '/assets/images/Trimbakeshwar-Jyotirling.jpg', alt: 'Trimbakeshwar Temple' },
-  { src: '/assets/images/temple.jpg', alt: 'Temple View' },
-  { src: '/assets/images/Brahmagiri.jpg', alt: 'Brahmagiri Hills' },
-  { src: '/assets/images/Tryambakeshvara1.jpg', alt: 'Lord Shiva' },
-  { src: '/assets/images/kushavart1.jpg', alt: 'Kushavart' },
-  { src: '/assets/images/trimbak.jpg', alt: 'Trimbak' },
+  { src: asset('/assets/images/Trimbakeshwar-Jyotirling.jpg'), alt: 'Trimbakeshwar Temple' },
+  { src: asset('/assets/images/temple.jpg'), alt: 'Temple View' },
+  { src: asset('/assets/images/Brahmagiri.jpg'), alt: 'Braghmagiri Hills' },
+  { src: asset('/assets/images/Tryambakeshvara1.jpg'), alt: 'Lord Shiva' },
+  { src: asset('/assets/images/kushavart1.jpg'), alt: 'Kushavart' },
+  { src: asset('/assets/images/trimbak.jpg'), alt: 'Trimbak' },
 ];
 
 const timingsData = [

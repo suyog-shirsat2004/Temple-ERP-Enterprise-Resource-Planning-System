@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import { asset } from '../utils/paths';
 
 const RoomBooking = () => {
   const [rooms, setRooms] = useState([]);
@@ -205,7 +206,7 @@ const RoomBooking = () => {
                     <i className="fas fa-hand-pointer" style={{ marginRight: 4 }}></i>Click to Book
                   </div>
                   <div style={{ position: 'relative', height: 220, overflow: 'hidden' }}>
-                    <img src={`/images/rooms/${img}`} alt={name} style={{
+                    <img src={asset(`/images/rooms/${img}`)} alt={name} style={{
                       width: '100%', height: '100%', objectFit: 'cover',
                       transition: 'transform 0.5s ease'
                     }}
@@ -276,7 +277,7 @@ const RoomBooking = () => {
                 alignItems: 'center', justifyContent: 'center', color: '#64748b'
               }}>✕</button>
               <div style={{ textAlign: 'center', marginBottom: 35 }}>
-                <img src={`/images/rooms/${roomImages[modalRoom.index % roomImages.length]}`} alt={modalRoom.room_name}
+                <img src={asset(`/images/rooms/${roomImages[modalRoom.index % roomImages.length]}`)} alt={modalRoom.room_name}
                   style={{ width: '100%', height: 200, objectFit: 'cover', borderRadius: 15, marginBottom: 20 }}
                   onError={(e) => { e.target.style.display = 'none'; }} />
                 <h3 style={{ fontWeight: 700, color: '#1e293b', marginBottom: 5 }}>
@@ -455,7 +456,7 @@ const RoomBooking = () => {
       <footer style={{
         textAlign: 'center', padding: '40px 20px', color: 'rgba(255,255,255,0.6)', position: 'relative', zIndex: 1
       }}>
-        <img src="/images/temple/icon symbol.webp" alt="Temple" style={{
+        <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{
           width: 50, height: 50, marginBottom: 15, opacity: 0.7, transition: 'all 0.3s ease'
         }}
         onMouseEnter={(e) => { e.target.style.opacity = 1; e.target.style.transform = 'scale(1.1)'; }}
