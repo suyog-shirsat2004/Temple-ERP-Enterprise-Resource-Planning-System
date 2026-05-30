@@ -11,7 +11,7 @@
 
 > 🌐 **Live Demo:** [Temple ERP - Live](https://suyog-shirsat2004.github.io/Temple-ERP-Enterprise-Resource-Planning-System/)
 > 
-> *Note: The live demo runs the frontend only. Connect it to a running backend instance for full functionality.*
+> 🔗 **Live Backend API:** `https://temple-erp-api.loca.lt/api` (tunnel — backend must be running locally)
 
 ---
 
@@ -886,15 +886,21 @@ npm install
 **backend/.env**
 ```env
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/temple_erp
-JWT_SECRET=your_super_secret_jwt_key_change_in_production
-JWT_EXPIRE=7d
+MONGO_URI=mongodb+srv://suyogshirsat2004_db_user:<password>@cluster0.9yvwvlx.mongodb.net/temple_erp?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=your_jwt_secret_change_this
 FRONTEND_URL=http://localhost:5173
 ```
+
+*Note: Falls back to `mongodb-memory-server` if Atlas is unreachable.*
 
 **frontend/.env**
 ```env
 VITE_API_URL=http://localhost:5000/api
+```
+
+**For live deployment**, set the frontend `.env` to point to a public tunnel:
+```env
+VITE_API_URL=https://temple-erp-api.loca.lt/api
 ```
 
 ### Running the Application
@@ -907,14 +913,19 @@ npm run dev
 # Terminal 2 - Frontend (runs on port 5173)
 cd frontend
 npm run dev
+
+# Terminal 3 (optional) - Public tunnel for live testing
+npx localtunnel --port 5000 --subdomain temple-erp-api
 ```
 
 ### Access Points
 
 | Service | URL |
 |---------|-----|
-| Frontend | http://localhost:5173 |
-| Backend API | http://localhost:5000 |
+| Frontend (local) | http://localhost:5173/Temple-ERP-Enterprise-Resource-Planning-System/ |
+| Frontend (live) | https://suyog-shirsat2004.github.io/Temple-ERP-Enterprise-Resource-Planning-System/ |
+| Backend API (local) | http://localhost:5000 |
+| Backend API (live tunnel) | https://temple-erp-api.loca.lt/api |
 | Health Check | http://localhost:5000/api/health |
 | Uploads | http://localhost:5000/uploads/ |
 
