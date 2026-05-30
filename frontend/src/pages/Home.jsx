@@ -42,7 +42,7 @@ const Home = () => {
       }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{ width: 40, height: 40 }} />
+            <img src={asset('/images/temple/icon-symbol.webp')} alt="Temple" style={{ width: 40, height: 40 }} />
             <span style={{ fontSize: 22, fontWeight: 700, color: '#ffd700', textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>Temple ERP</span>
           </Link>
 

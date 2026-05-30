@@ -145,7 +145,7 @@ const Restaurant = () => {
       }}>
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-          background: `url(${asset('/images/temple/icon symbol.webp')}) no-repeat center center`,
+          background: `url(${asset('/images/temple/icon-symbol.webp')}) no-repeat center center`,
           backgroundSize: 250, opacity: 0.1, animation: 'float 6s ease-in-out infinite'
         }}></div>
         <div style={{ position: 'relative', zIndex: 1 }}>

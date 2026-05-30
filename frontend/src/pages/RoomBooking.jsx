@@ -456,7 +456,7 @@ const RoomBooking = () => {
       <footer style={{
         textAlign: 'center', padding: '40px 20px', color: 'rgba(255,255,255,0.6)', position: 'relative', zIndex: 1
       }}>
-        <img src={asset('/images/temple/icon symbol.webp')} alt="Temple" style={{
+        <img src={asset('/images/temple/icon-symbol.webp')} alt="Temple" style={{
           width: 50, height: 50, marginBottom: 15, opacity: 0.7, transition: 'all 0.3s ease'
         }}
         onMouseEnter={(e) => { e.target.style.opacity = 1; e.target.style.transform = 'scale(1.1)'; }}
